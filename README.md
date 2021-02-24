@@ -1,2 +1,2 @@
-# flex-widgets-for-elementor
+# flextions-for-elementor
 Widgets for Elementor
