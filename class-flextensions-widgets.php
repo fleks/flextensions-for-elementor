@@ -8,7 +8,7 @@
  * @author     Felix Herzog
  * @copyright  2021
  * @license    https://opensource.org/licenses/GPL-3.0 GPL-3.0-only
- * @link       link(https://github.com/fleks/flex-widgets-for-elementor,
+ * @link       link(https://github.com/fleks/flextensions-for-elementor,
  *             Flextensions for Elementor on GitHub)
  * @since      1.0.0
  * php version 7.3
