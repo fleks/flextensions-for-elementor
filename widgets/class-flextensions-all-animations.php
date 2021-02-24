@@ -80,7 +80,7 @@ class Flextensions_AllAnimations extends Widget_Base {
 	 * @return string Widget icon.
 	 */
 	public function get_icon() {
-		return 'fa fa-mouse-pointer';
+		return 'fa fa-expand-arrows-alt';
 	}
 
 	/**

@@ -86,7 +86,7 @@ class Flextensions_AllControls extends Widget_Base {
 	 * @return string Widget icon.
 	 */
 	public function get_icon() {
-		return 'fa fa-arrow-up';
+		return 'fa fa-cogs';
 	}
 
 	/**
