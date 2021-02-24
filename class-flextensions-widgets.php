@@ -14,9 +14,7 @@
  * php version 7.3
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-    exit; // Exit if accessed directly.
-}
+defined( 'ABSPATH' ) || die(); // Blocks direct access to the plugin PHP files.
 
 final class Flextensions_Widgets {
 

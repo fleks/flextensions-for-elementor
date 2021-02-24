@@ -9,8 +9,10 @@
  * Plugin URI:  https://github.com/fleks/flextensions-for-elemento
  * Version:     1.0.0
  * Author:      Felix Herzog
- * Text Domain: flex-widgets
+ * Text Domain: flextensions
  */
+
+ defined( 'ABSPATH' ) || die(); // Blocks direct access to the plugin PHP files.
 
 define( 'FLEXTENSIONS', __FILE__ );
 
@@ -28,7 +30,7 @@ function add_flextensions_category( $elements_manager ) {
 	$categories['flextensions-category'] =
 		[
 			'title' => 'Flextensions',
-			'icon'  => 'fa fa-plug'
+			'icon'  => 'fa fa-superpowers'
 		];
 
     // Merge Flextensions category with remaining categories
