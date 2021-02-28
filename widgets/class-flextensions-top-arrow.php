@@ -201,9 +201,29 @@ class Flextensions_TopArrow extends Widget_Base {
 		);		
 
 		$this->add_control(
-			'right',
+			'arrow_side',
 			[
-				'label' => __( 'Distance Right', 'flextensions' ),
+				'label' => 'Arrow Position',
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'left' => [
+						'title' => __( 'Left', 'elementor-pro' ),
+						'icon' => 'eicon-h-align-left',
+					],
+					'right' => [
+						'title' => __( 'Right', 'elementor-pro' ),
+						'icon' => 'eicon-h-align-right',
+					],
+				],
+				'default' => 'right',
+				'toggle' => false,
+			]
+		);
+
+		$this->add_responsive_control(
+			'distance',
+			[
+				'label' => __( 'Distance horizontal ', 'flextensions' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%', 'vw' ],
 				'range' => [
@@ -227,12 +247,12 @@ class Flextensions_TopArrow extends Widget_Base {
 					'size' => 25,
 				],
 				'selectors' => [
-					'{{WRAPPER}}' => 'position: fixed; width: auto; line-height: 0px;',
+					'{{WRAPPER}}' => 'position: fixed; width: auto; line-height: 0px; {{arrow_side.value}}: {{SIZE}}{{UNIT}}',
 				],
 			]
 		);
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'boxed_width',
 			[
 				'label' => __( 'Boxed Width', 'flextensions' ),
@@ -255,12 +275,12 @@ class Flextensions_TopArrow extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}}' => 'right: max({{right.size}}{{right.unit}}, calc((100vw - {{SIZE}}{{UNIT}}) / 2 + {{right.size}}{{right.unit}}));',
+					'{{WRAPPER}}' => '{{arrow_side.value}}: max({{distance.size}}{{distance.unit}}, calc((100vw - {{SIZE}}{{UNIT}}) / 2 + {{distance.size}}{{distance.unit}}));',
 				],
 			]
 		);		
 
-		$this->add_control(
+		$this->add_responsive_control(
 			'bottom',
 			[
 				'label' => __( 'Distance Bottom', 'flextensions' ),
@@ -330,14 +350,13 @@ class Flextensions_TopArrow extends Widget_Base {
 			[
 				'label' => __( 'Primary Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
-				'default' => '',
 				'selectors' => [
 					'{{WRAPPER}}.elementor-view-stacked .elementor-icon' => 'background-color: {{VALUE}};',
 					'{{WRAPPER}}.elementor-view-framed .elementor-icon, {{WRAPPER}}.elementor-view-default .elementor-icon' => 'color: {{VALUE}}; border-color: {{VALUE}};',
 					'{{WRAPPER}}.elementor-view-framed .elementor-icon' => 'fill: {{VALUE}};',
 				],
 				'global' => [
-					'default' => Global_Colors::COLOR_PRIMARY,
+					'default' => Global_Colors::COLOR_ACCENT,
 				],
 			]
 		);
