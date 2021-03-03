@@ -239,6 +239,8 @@ class Flextensions_SideButtons extends Widget_Base {
 				'toggle' => false,
                 'selectors' => [
                     '{{WRAPPER}}' => 'position: fixed;',
+                    '{{WRAPPER}} dt' => 'clear: both;',
+                    '{{WRAPPER}} dt, {{WRAPPER}} dd' => 'float: left;',
                 ]
 			]
 		);
@@ -263,31 +265,31 @@ class Flextensions_SideButtons extends Widget_Base {
 		);
 		
 		$this->add_control(
-			'primary_color',
+			'color',
 			[
 				'label' => __( 'Primary Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} dl' => 'color: {{VALUE}};',
-				],
 				'global' => [
 					'default' => Global_Colors::COLOR_TEXT,
 				],
+				'selectors' => [
+					'{{WRAPPER}} dl' => 'color: {{VALUE}};',
+				],                
 			]
 		);
 
 		$this->add_control(
-			'secondary_color',
+			'background_color',
 			[
-				'label' => __( 'Secondary Color', 'elementor' ),
+				'label' => __( 'Background Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
-				'selectors' => [
-					'{{WRAPPER}} dt, {{WRAPPER}} dd' => 'background-color: {{VALUE}};',
-				],
-				'global' => [
+                'global' => [
 					'default' => Global_Colors::COLOR_ACCENT,
-				],                
+				],  
+				'selectors' => [
+					'{{WRAPPER}} a dt, {{WRAPPER}} a dd' => 'background-color: {{VALUE}};',
+				],              
 			]
 		);
 
@@ -310,25 +312,25 @@ class Flextensions_SideButtons extends Widget_Base {
 		);
 
 		$this->add_control(
-			'primary_color_hover',
+			'color_hover',
 			[
 				'label' => __( 'Primary Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} dt:hover, {{WRAPPER}} dd:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} a:hover dd, {{WRAPPER}} a:hover dt' => 'color: {{VALUE}};',
 				],
 			]
 		);
 		
 		$this->add_control(
-			'secondary_color_hover',
+			'background_color_hover',
 			[
-				'label' => __( 'Secondary Color', 'elementor' ),
+				'label' => __( 'Background Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} dt:hover, {{WRAPPER}} dd:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} a:hover dt, {{WRAPPER}} a:hover dd' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -363,7 +365,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				'range' => [
 					'px' => [
 						'min' => 0,
-						'max' => 100,
+						'max' => 200,
 						'step' => 1,
 					],
 					'%' => [
@@ -395,7 +397,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				'range' => [
 					'px' => [
 						'min' => 0,
-						'max' => 100,
+						'max' => 1000,
 						'step' => 1,
 					],
 					'%' => [
@@ -458,6 +460,16 @@ class Flextensions_SideButtons extends Widget_Base {
 						'min' => 0,
 						'max' => 100,
 					],
+					'em' => [
+						'min' => 0,
+						'max' => 100,
+                        'step' => 0.1,
+					],
+					'rm' => [
+						'min' => 0,
+						'max' => 100,
+                        'step' => 0.1,
+					],                                        
 				],
 				'default' => [
 					'unit' => 'px',
@@ -510,7 +522,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				'range' => [
 					'px' => [
 						'min' => 0,
-						'max' => 2000,
+						'max' => 500,
 						'step' => 1,
 					],
 					'%' => [
@@ -523,8 +535,12 @@ class Flextensions_SideButtons extends Widget_Base {
 						'step' => 1,
 					],
 				],
+				'default' => [
+					'unit' => 'px',
+					'size' => 5,
+				],                
 				'selectors' => [
-					'{{WRAPPER}} dd' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} dd' => 'width: {{SIZE}}{{UNIT}}; line-height: calc( {{icon_size.SIZE}}{{icon_size.UNIT}} + 2 * {{icon_padding.SIZE}}{{icon_padding.UNIT}} )',
 				],
 			]
 		);
@@ -594,30 +610,13 @@ class Flextensions_SideButtons extends Widget_Base {
 		);        
 
 		$this->add_control(
-			'border_width',
-			[
-				'label' => __( 'Border Width', 'elementor' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'selectors' => [
-					'{{WRAPPER}} .elementor-icon' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-				'condition' => [
-					'view' => 'framed',
-				],
-			]
-		);
-
-		$this->add_control(
 			'border_radius',
 			[
 				'label' => __( 'Border Radius', 'elementor' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
-					'{{WRAPPER}} .elementor-icon' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-				'condition' => [
-					'view!' => 'default',
+					'{{WRAPPER}} dt, {{WRAPPER}} dd' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -640,12 +639,6 @@ class Flextensions_SideButtons extends Widget_Base {
             ]
         );
 
-/*
-            		$target = $settings['website_link']['is_external'] ? ' target="_blank"' : '';
-		$nofollow = $settings['website_link']['nofollow'] ? ' rel="nofollow"' : '';
-		echo '<a href="' . $settings['website_link']['url'] . '"' . $target . $nofollow . '>Blind Text</a>';	
-		); */
-
 		$this->end_controls_section();
 
 	}
@@ -665,10 +658,12 @@ class Flextensions_SideButtons extends Widget_Base {
 		if ( $settings['list'] ) {
 			echo '<dl>';
 			foreach (  $settings['list'] as $item ) {
-				echo '<dt class="elementor-repeater-item-' . $item['_id'] . '">';
+                $target = $item['link']['is_external'] ? ' target="_blank"' : '';
+		        $nofollow = $item['link']['nofollow'] ? ' rel="nofollow"' : '';
+				echo '<a href="' . $item['link']['url'] . '"' . $target . $nofollow . '><dt class="flextensions-side-button elementor-item-' . $item['_id'] . '">';
                 \Elementor\Icons_Manager::render_icon( $item['icon'], [ 'aria-hidden' => 'true' ] );
                 echo '</i></dt>';
-				echo '<dd>' . $item['content'] . '</dd>';
+				echo '<dd class="elementor-item-' . $item['_id'] . '">' . $item['content'] . '</dd></a>';
 			}
 			echo '</dl>';
 		}
