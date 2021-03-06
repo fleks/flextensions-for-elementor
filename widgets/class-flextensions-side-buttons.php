@@ -20,7 +20,10 @@ use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Repeater;
 use Elementor\Icons_Manager;
+use Elementor\Group_Control_Typography;
+use Elementor\Core\Schemes\Typography;
 use Elementor\Group_Control_Text_Shadow;
+use Elementor\Group_Control_Box_Shadow;
 use Elementor\Core\Schemes\Color;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 
@@ -185,7 +188,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				'placeholder' => 'https://your-link.com',
 				'show_external' => true,
 				'default' => [
-					'url' => '',
+					'url' => '#',
 					'is_external' => false,
 					'nofollow' => false,
 				],
@@ -238,12 +241,96 @@ class Flextensions_SideButtons extends Widget_Base {
 				'default' => 'right',
 				'toggle' => false,
                 'selectors' => [
-                    '{{WRAPPER}}' => 'position: fixed;',
+                    '{{WRAPPER}}' => 'position: fixed; width: auto;',
                     '{{WRAPPER}} dt' => 'clear: both;',
-                    '{{WRAPPER}} dt, {{WRAPPER}} dd' => 'float: left;',
-                ]
+                    '{{WRAPPER}} dt, {{WRAPPER}} dd' => 'display: flex; position: relative; {{VALUE}}: 0px',
+                ],
 			]
 		);
+
+        // BORDER !!!
+
+		$this->add_control(
+			'float',
+			[
+				'label' => __( 'Float', 'elementor' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'left' => [
+						'title' => __( 'Left', 'elementor-pro' ),
+						'icon' => 'eicon-h-align-left',
+					],
+					'right' => [
+						'title' => __( 'Right', 'elementor-pro' ),
+						'icon' => 'eicon-h-align-right',
+					],
+				],
+				'default' => 'left',
+				'toggle' => false,
+                'selectors' => [
+                    '{{WRAPPER}} dt, {{WRAPPER}} dd' => 'float: {{VALUE}};',
+                ],
+			]
+		);
+
+		$this->add_control(
+			'text_align',
+			[
+				'label' => __( 'Alignment Horizontal', 'flextensions' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'left' => [
+						'title' => __( 'Left', 'elementor' ),
+						'icon' => 'eicon-text-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'elementor' ),
+						'icon' => 'eicon-text-align-center',
+					],
+					'right' => [
+						'title' => __( 'Right', 'elementor' ),
+						'icon' => 'eicon-text-align-right',
+					],
+					'justify' => [
+						'title' => __( 'Justify', 'elementor' ),
+						'icon' => 'eicon-text-align-justify',
+					],                    
+				],
+				'default' => 'center',
+				'toggle' => false,
+                'selectors' => [
+                    '{{WRAPPER}} dt' => 'justify-content: center',
+                    '{{WRAPPER}} dd div' => 'width: 100%; text-align: {{VALUE}};',
+                ],
+			]
+		);      
+        
+		$this->add_control(
+			'vertical_align',
+			[
+				'label' => __( 'Alignment Vertical', 'flextensions' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'flex-start' => [
+						'title' => __( 'Top', 'elementor' ),
+						'icon' => 'eicon-v-align-top',
+					],
+					'center' => [
+						'title' => __( 'Middle', 'elementor' ),
+						'icon' => 'eicon-v-align-middle',
+					],
+					'flex-end' => [
+						'title' => __( 'Bottom', 'elementor' ),
+						'icon' => 'eicon-v-align-bottom',
+					],
+				],
+				'default' => 'middle',
+				'toggle' => false,
+                'selectors' => [
+                    '{{WRAPPER}} dt, {{WRAPPER}} dd' => 'align-items: {{VALUE}};',
+                ],
+			]
+		);         
 
         $this->end_controls_section();
 
@@ -273,7 +360,7 @@ class Flextensions_SideButtons extends Widget_Base {
 					'default' => Global_Colors::COLOR_TEXT,
 				],
 				'selectors' => [
-					'{{WRAPPER}} dl' => 'color: {{VALUE}};',
+					'{{WRAPPER}} dl a' => 'color: {{VALUE}};',
 				],                
 			]
 		);
@@ -297,10 +384,19 @@ class Flextensions_SideButtons extends Widget_Base {
 			Group_Control_Text_Shadow::get_type(),
 			[
 				'name' => 'icon_shadow',
-				'label' => __( 'Shadow', 'elementor' ),
-				'selector' => '{{WRAPPER}}',
+				'label' => __( 'Text Shadow', 'elementor' ),
+				'selector' => '{{WRAPPER}} a, {{WRAPPER}} a',
 			]
-		);		  
+		);
+        
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			[
+				'name' => 'box_shadow',
+				'label' => __( 'Box Shadow', 'elementor' ),
+				'selector' => '{{WRAPPER}} a dt, {{WRAPPER}} a dd',
+			]
+		);	        
 
 		$this->end_controls_tab();
 
@@ -318,7 +414,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} a:hover dd, {{WRAPPER}} a:hover dt' => 'color: {{VALUE}};',
+					'{{WRAPPER}} dl a:hover' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -339,8 +435,17 @@ class Flextensions_SideButtons extends Widget_Base {
 			Group_Control_Text_Shadow::get_type(),
 			[
 				'name' => 'icon_shadow_hover',
-				'label' => __( 'Shadow', 'elementor' ) . ' Hover',
-				'selector' => '{{WRAPPER}}',
+				'label' => __( 'Text Shadow', 'elementor' ) . ' Hover',
+				'selector' => '{{WRAPPER}} a:hover dt, {{WRAPPER}} a:hover dd',
+			]
+		);
+
+        $this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			[
+				'name' => 'box_shadow_hover',
+				'label' => __( 'Box Shadow', 'elementor' ) . ' Hover',
+				'selector' => '{{WRAPPER}} a:hover dt, {{WRAPPER}} a:hover dd',
 			]
 		);
 
@@ -364,16 +469,15 @@ class Flextensions_SideButtons extends Widget_Base {
 				'size_units' => [ 'px', '%', 'em' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
+						'min' => -50,
 						'max' => 200,
-						'step' => 1,
 					],
 					'%' => [
-						'min' => 0,
+						'min' => -5,
 						'max' => 100,
 					],
 					'em' => [
-						'min' => 0,
+						'min' => -5,
 						'max' => 100,
 						'step' => 0.1,
 					],	
@@ -384,6 +488,20 @@ class Flextensions_SideButtons extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}}' => '{{side.value}}: calc( {{SIZE}}{{UNIT}} - {{width.size}}{{width.unit}} )',
+				],
+			]
+		);
+
+		$this->add_control(
+			'show_text',
+			[
+				'label' => __( 'Show Text - ignore Distance Side', 'flextensions' ),
+				'type' => \Elementor\Controls_Manager::SWITCHER,
+				'label_on' => __( 'Show', 'flextensions' ),
+				'label_off' => __( 'Hide', 'flextensions' ),
+    			'default' => 'no',
+				'selectors' => [
+					'{{WRAPPER}}' => '{{side.VALUE}}: 0px;',
 				],
 			]
 		);        
@@ -412,13 +530,85 @@ class Flextensions_SideButtons extends Widget_Base {
 				],
 				'default' => [
 					'unit' => 'px',
-					'size' => 25,
+					'size' => '',
 				],
 				'selectors' => [
 					'{{WRAPPER}}' => 'top: {{SIZE}}{{UNIT}};',
 				],
+                'condition' => [
+                    'bottom[size]' => '',
+                ],                
 			]
 		);
+
+		$this->add_responsive_control(
+			'bottom',
+			[
+				'label' => __( 'Distance Bottom', 'flextensions' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'vh' ],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 1000,
+						'step' => 1,
+					],
+					'%' => [
+						'min' => 0,
+						'max' => 100,
+					],
+					'vh' => [
+						'min' => 0,
+						'max' => 100,
+						'step' => 1,
+					],
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => '',
+				],
+				'selectors' => [
+					'{{WRAPPER}}' => 'bottom: {{SIZE}}{{UNIT}};',
+				],
+                'condition' => [
+                    'top[size]' => '',
+                ],
+			]
+		);
+        
+		$this->add_control(
+			'position_anchor_top',
+			[
+				'label' => __( 'Position Anchor', 'flextensions' ),
+				'type' => \Elementor\Controls_Manager::SWITCHER,
+				'label_on' => __( 'Middle', 'flextensions' ),
+				'label_off' => __( 'Top', 'flextensions' ),
+    			'default' => 'no',
+				'selectors' => [
+					'{{WRAPPER}}' => 'transform: translate(0, -50%)',
+				],
+                'condition' => [
+                    'top[size]!' => '',
+                ],                
+			]
+		); 
+        
+		$this->add_control(
+			'position_anchor_bottom',
+			[
+				'label' => __( 'Position Anchor', 'flextensions' ),
+				'type' => \Elementor\Controls_Manager::SWITCHER,
+				'label_on' => __( 'Middle', 'flextensions' ),
+				'label_off' => __( 'Bottom', 'flextensions' ),
+    			'default' => 'no',
+				'selectors' => [
+					'{{WRAPPER}}' => 'transform: translate(0, 50%)',
+				],
+                'condition' => [
+                    'bottom[size]!' => '',
+                ],                
+			]
+		);           
 
 		$this->add_control(
 			'z_index',
@@ -447,7 +637,7 @@ class Flextensions_SideButtons extends Widget_Base {
 		$this->add_responsive_control(
 			'icon_size',
 			[
-				'label' => __( 'Size', 'elementor' ),
+				'label' => __( 'Icon Size', 'elementor' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
 				'range' => [
@@ -469,14 +659,14 @@ class Flextensions_SideButtons extends Widget_Base {
 						'min' => 0,
 						'max' => 100,
                         'step' => 0.1,
-					],                                        
+					],
 				],
 				'default' => [
 					'unit' => 'px',
 					'size' => 32,
 				],
 				'selectors' => [
-					'{{WRAPPER}} dt' => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} dt' => 'font-size: {{SIZE}}{{UNIT}}; text-align: center;',
 				],
 			]
 		);
@@ -505,13 +695,87 @@ class Flextensions_SideButtons extends Widget_Base {
 				],
 				'default' => [
 					'unit' => 'px',
-					'size' => 5,
+					'size' => 0,
 				],
 				'selectors' => [
-					'{{WRAPPER}} i' => 'padding: {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}} dt i' => 'padding: {{SIZE}}{{UNIT}}',
 				],
 			]
-		);        
+		);
+        
+    	$this->add_responsive_control(
+			'icon_container_width',
+			[
+				'label' => __( 'Icon Container Width', 'flextensions' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'em' ],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 100,
+						'step' => 1,
+					],
+					'%' => [
+						'min' => 0,
+						'max' => 100,
+					],
+					'em' => [
+						'min' => 0,
+						'max' => 100,
+						'step' => 0.1,
+					],	
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => 42,
+				],
+				'selectors' => [
+					'{{WRAPPER}} dt' => 'width: {{SIZE}}{{UNIT}}',
+				],
+			]
+		);
+
+        $this->add_responsive_control(
+			'height',
+			[
+				'label' => __( 'Height', 'flextensions' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'em' ],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 100,
+						'step' => 1,
+					],
+					'%' => [
+						'min' => 0,
+						'max' => 100,
+					],
+					'em' => [
+						'min' => 0,
+						'max' => 100,
+						'step' => 0.1,
+					],	
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => 42,
+				],
+				'selectors' => [
+                    '{{WRAPPER}} dt, {{WRAPPER}} dd' => 'height: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'content_typography',
+				'label' => __( 'Typography', 'elementor' ),
+				'scheme' => Typography::TYPOGRAPHY_1,
+				'selector' => '{{WRAPPER}} a dd',
+			]
+		);
 
 		$this->add_responsive_control(
 			'width',
@@ -540,13 +804,25 @@ class Flextensions_SideButtons extends Widget_Base {
 					'size' => 5,
 				],                
 				'selectors' => [
-					'{{WRAPPER}} dd' => 'width: {{SIZE}}{{UNIT}}; line-height: calc( {{icon_size.SIZE}}{{icon_size.UNIT}} + 2 * {{icon_padding.SIZE}}{{icon_padding.UNIT}} )',
+					'{{WRAPPER}} dd' => 'width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
+
+    	$this->add_responsive_control(
+			'text_padding',
+			[
+				'label' => __( 'Text Padding', 'elementor' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%', 'rem'],
+				'selectors' => [
+					'{{WRAPPER}} dd' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);            
         
     	$this->add_responsive_control(
-			'icon_margin',
+			'space_between',
 			[
 				'label' => __( 'Space Between Horizontal', 'flextensions' ),
 				'type' => Controls_Manager::SLIDER,
@@ -572,13 +848,13 @@ class Flextensions_SideButtons extends Widget_Base {
 					'size' => 5,
 				],
 				'selectors' => [
-					'{{WRAPPER}} dt, {{WRAPPER}} dd' => 'margin-bottom: {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}} dl > a:not(:last-of-type) dt, {{WRAPPER}} dl > a:not(:last-of-type) dd' => 'margin-bottom: {{SIZE}}{{UNIT}}',
 				],
 			]
 		);
         
     	$this->add_responsive_control(
-			'icon_space_between',
+			'border_space_between',
 			[
 				'label' => __( 'Space Between Vertical', 'flextensions' ),
 				'type' => Controls_Manager::SLIDER,
@@ -601,11 +877,28 @@ class Flextensions_SideButtons extends Widget_Base {
 				],
 				'default' => [
 					'unit' => 'px',
-					'size' => 5,
+					'size' => '',
 				],
 				'selectors' => [
-					'{{WRAPPER}} dt' => 'margin-{{side.value}}: {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}} dt' => 'border-{{side.value}}-width: {{SIZE}}{{UNIT}}; border-{{side.value}}-style: solid;',
 				],
+			]
+		);        
+
+		$this->add_control(
+			'border_color',
+			[
+				'label' => __( 'Primary Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'global' => [
+					'default' => Global_Colors::COLOR_TEXT,
+				],
+				'selectors' => [
+					'{{WRAPPER}} dt' => 'border-{{side.value}}-color: {{VALUE}}',
+				],
+                'condition' => [
+                    'border_space_between!' => '',
+                ],             
 			]
 		);        
 
@@ -616,7 +909,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
-					'{{WRAPPER}} dt, {{WRAPPER}} dd' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} dt' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -630,6 +923,34 @@ class Flextensions_SideButtons extends Widget_Base {
 			  'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
+
+    	$this->add_control(
+			'transition',
+			[
+				'label' => __( 'Transition', 'elementor' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'ms','s' ],
+				'range' => [
+					'ms' => [
+						'min' => 0,
+						'max' => 5000,
+						'step' => 100,
+					],
+                's' => [
+						'min' => 0,
+						'max' => 10,
+						'step' => 0.1,
+					],	
+				],
+				'default' => [
+					'unit' => 'ms',
+					'size' => 500,
+				],
+				'selectors' => [
+					'{{WRAPPER}} dt, {{WRAPPER}} dd' => 'transition: {{side.VALUE}} {{SIZE}}{{UNIT}}',
+				],
+			]
+		);        
 		
 		$this->add_control(
 			'hover_animation',
@@ -657,13 +978,14 @@ class Flextensions_SideButtons extends Widget_Base {
 
 		if ( $settings['list'] ) {
 			echo '<dl>';
+
 			foreach (  $settings['list'] as $item ) {
                 $target = $item['link']['is_external'] ? ' target="_blank"' : '';
 		        $nofollow = $item['link']['nofollow'] ? ' rel="nofollow"' : '';
-				echo '<a href="' . $item['link']['url'] . '"' . $target . $nofollow . '><dt class="flextensions-side-button elementor-item-' . $item['_id'] . '">';
+				echo '<a href="' . $item['link']['url'] . '"' . $target . $nofollow . '><dt class="flextensions-side-button elementor-item-' . $item['_id'] . '" data-side="' . $settings['side'] . '">';
                 \Elementor\Icons_Manager::render_icon( $item['icon'], [ 'aria-hidden' => 'true' ] );
-                echo '</i></dt>';
-				echo '<dd class="elementor-item-' . $item['_id'] . '">' . $item['content'] . '</dd></a>';
+                echo '</dt>';
+				echo '<dd class="elementor-item-' . $item['_id'] . '"><div>' . $item['content'] . '</div></dd></a>';
 			}
 			echo '</dl>';
 		}
@@ -683,8 +1005,10 @@ class Flextensions_SideButtons extends Widget_Base {
 		<# if ( settings.list.length ) { #>
             <dl>
 			<# _.each( settings.list, function( item ) { #>
-				<dt class="elementor-repeater-item-{{ item._id }}">{{{ elementor.helpers.renderIcon( view, item.icon, { 'aria-hidden': true }, 'i', 'object' ).value }}}</dt>
-				<dd>{{{ item.content }}}</dd>
+                <a href="{{ item.link.url }}">
+				    <dt class="flextensions-side-button elementor-repeater-item-{{ item._id }}" data-side="{{{ settings.side }}}">{{{ elementor.helpers.renderIcon( view, item.icon, { 'aria-hidden': true }, 'i', 'object' ).value }}}</dt>
+				    <dd class="elementor-repeater-item-{{ item._id }}"><div>{{{ item.content }}}</div></dd>
+                </a>
 			<# }); #>
 			</dl>
 		<# } #>
