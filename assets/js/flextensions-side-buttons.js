@@ -47,7 +47,6 @@ jQuery( '.flextensions-side-button' ).each( function(i, obj) {
             retract( 'dt, dd', listSide );
             clickCount[listPairs] = 0;
         }
-        
     });
 
     function extend( obj, side, distance ) {

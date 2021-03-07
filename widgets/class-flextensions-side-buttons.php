@@ -436,7 +436,7 @@ class Flextensions_SideButtons extends Widget_Base {
 			[
 				'name' => 'icon_shadow_hover',
 				'label' => __( 'Text Shadow', 'elementor' ) . ' Hover',
-				'selector' => '{{WRAPPER}} a.hover dt, {{WRAPPER}} a.hover dd',
+				'selector' => '{{WRAPPER}} dl a.hover',
 			]
 		);
 
