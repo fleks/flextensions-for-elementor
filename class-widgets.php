@@ -91,7 +91,7 @@ class Widgets {
 	}
 
 	/**
-	 *  Plugin class constructor
+	 * Plugin class constructor
 	 *
 	 * Register plugin action hooks and filters
 	 *

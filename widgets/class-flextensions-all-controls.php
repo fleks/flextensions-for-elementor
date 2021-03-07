@@ -111,7 +111,7 @@ class Flextensions_AllControls extends Widget_Base {
 	 * Enqueue styles.
 	 */
 	public function get_style_depends() {
-		return array( 'flextensions-all-controls' );
+		// return array( 'flextensions-all-controls' );
 	}
 
 	/**

@@ -1,73 +1,81 @@
-/*jQuery('dt').on('mouseover', function(){
-    jQuery(this).attr('style', 'position: relative; right: 200px');
-    jQuery(this).next().attr('style', 'position: relative; right: 200px')
-});
-
-jQuery('dt').on('mouseout', function(){
-    jQuery(this).attr('style', 'position: relative; right: 0px');
-    jQuery(this).next().attr('style', 'position: relative; right: 0px')
-});*/
-
+// Click counter for buttons
 var clickCount = {};
-var touchDown = 0;
+// Touch or not
+var touchDown = false;
 
-jQuery( '.flextensions-side-button' ).each( function(i, obj) {
-    var listPairs = jQuery( obj ).attr( 'class' ).replace( 'flextensions-side-button ', '' );
-    var listSide = jQuery( obj ).data( 'side' );
-    var listSideDistance = jQuery( obj ).parent().parent().parent().parent().css( listSide );
-    var listWidthDt = jQuery( obj ).css( 'width' )
-    var listWidthDd = jQuery( obj ).next().css( 'width' );
+jQuery('.flextensions-side-button').each(function (i, obj) {
+    // Get item ID-Class
+    var listPairs = jQuery(obj).attr('class').replace('flextensions-side-button ', '');
+    // Get side of List
+    var listSide = jQuery(obj).data('side');
+    // Get default distance from browser side
+    var listSideDistance = jQuery(obj).parent().parent().parent().parent().css(listSide);
+    // Set item click counter to 0
     clickCount[listPairs] = 0;
-    jQuery( '.' + listPairs ).bind('mouseenter', function(e) {
-        console.log( 'mouseenter' );
-        if( touchDown != 1) {
-            jQuery( '.' + listPairs ).parent().addClass('hover');
-            extend( '.' + listPairs, listSide, listSideDistance );
-        }
-        else {
+
+    // Mouseenter bind for desktop
+    jQuery('.' + listPairs).bind('mouseenter', function (e) {
+        if (!touchDown) {
+            // Add hover class
+            jQuery('.' + listPairs).parent().addClass('hover');
+            // extend side
+            extend('.' + listPairs, listSide, listSideDistance);
+        } else {
+            // Prevent default for touchscreen
             e.preventDefault();
         }
     });
-    jQuery( '.' + listPairs ).bind('touchstart', function(e) {
-        touchDown = 1;
 
-        if( clickCount[listPairs] == 0 ) {
+    // Touch bind for mobile
+    jQuery('.' + listPairs).bind('touchstart', function (e) {
+        touchDown = true;
+        // First click action
+        if (clickCount[listPairs] == 0) {
             e.preventDefault();
-            console.log( '1: ' + listPairs );
-            retract( 'dt, dd', listSide );
-            jQuery( '.' + listPairs ).parent().addClass('hover');
-            extend( '.' + listPairs, listSide, listSideDistance );
+            // Retract all items and remove hover class
+            retract(listSide);
+            // Add hover class
+            jQuery('.' + listPairs).parent().addClass('hover');
+            // Extend item
+            extend('.' + listPairs, listSide, listSideDistance);
             clickCount[listPairs] = 1;
         }
-        else if( clickCount[listPairs] == 1 ) {
-            console.log( '2: ' + listPairs );
-            if ( jQuery( this ).hasClass( 'flextensions-side-button' ) ) {
+        // Second click action
+        else if (clickCount[listPairs] == 1) {
+            // If icon click action
+            if (jQuery(this).hasClass('flextensions-side-button')) {
                 e.preventDefault();
             }
-            retract( 'dt, dd', listSide );
+            // Retract item with dely of one sec
+            setTimeout(function() {
+                retract(listSide);
+            }, 1000);
+            // Set click counter to default
             clickCount[listPairs] = 0;
         }
     });
 
-    function extend( obj, side, distance ) {
-        console.log( 'extend: ' + obj ); 
-        jQuery( obj ).attr( 'style', side + ': calc( ( ' + distance + ' ) * ( -1 ) );' );
+    // Mouseleave bind for desktop
+    jQuery('.' + listPairs).bind('mouseleave', function () {
+        // Retract all items & remove hover class
+        retract(listSide);
+    });
+
+    // Extend function
+    function extend(obj, side, distance) {
+        // Extend item to full width
+        jQuery(obj).attr('style', side + ': calc( ( ' + distance + ' ) * ( -1 ) );');
     }
 
-
-    function retract( obj, side ) {
-        jQuery( 'dt, dd' ).attr( 'style', side + ': 0px;' );
-        jQuery( 'dt' ).parent().removeClass('hover');
-        for( var key in clickCount ) {
-            clickCount[ key ] = 0;
+    // Retract function
+    function retract(side) {
+        // Retract all items
+        jQuery('dt, dd').attr('style', side + ': 0px;');
+        // Remove hover class from all items
+        jQuery('dt').parent().removeClass('hover');
+        // Set all click counter to default
+        for (var key in clickCount) {
+            clickCount[key] = 0;
         }
     }
-
-    jQuery( '.' + listPairs ).bind('mouseleave', function() {
-            retract( '.' + listPairs, listSide );
-            jQuery( '.' + listPairs ).parent().removeClass('hover')
-    });
-   /* jQuery( '.' + listPairs ).bind('touchend', function() {
-        retract( '.' + listPairs, listSide );
-    }); */
 });

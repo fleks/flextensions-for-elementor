@@ -10,7 +10,7 @@
  * @license    https://opensource.org/licenses/GPL-3.0 GPL-3.0-only
  * @link       link(https://github.com/fleks/flextensions-for-elementor,
  *             Flextensions for Elementor on GitHub)
- * @since      1.0.0
+ * @since      1.0.1
  * php version 7.3
  */
 
@@ -45,7 +45,7 @@ class Flextensions_SideButtons extends Widget_Base {
 	 public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
 
-		wp_register_script( 'flextensions-side-buttons', plugins_url( '/assets/js/flextensions-side-buttons.js?t=' . time(), FLEXTENSIONS ), array(), '1.0.0' );
+		wp_register_script( 'flextensions-side-buttons', plugins_url( '/assets/js/flextensions-side-buttons.js', FLEXTENSIONS ), array(), '1.0.0' );
 	}
 
 	/**
@@ -109,7 +109,7 @@ class Flextensions_SideButtons extends Widget_Base {
 	 * Enqueue styles.
 	 */
 	public function get_style_depends() {
-		return array( 'flextensions-side-buttons' );
+		//return array( 'flextensions-side-buttons' );
 	}
 
     /**
@@ -978,7 +978,6 @@ class Flextensions_SideButtons extends Widget_Base {
 
 		if ( $settings['list'] ) {
 			echo '<dl>';
-
 			foreach (  $settings['list'] as $item ) {
                 $target = $item['link']['is_external'] ? ' target="_blank"' : '';
 		        $nofollow = $item['link']['nofollow'] ? ' rel="nofollow"' : '';
@@ -1005,9 +1004,9 @@ class Flextensions_SideButtons extends Widget_Base {
 		<# if ( settings.list.length ) { #>
             <dl>
 			<# _.each( settings.list, function( item ) { #>
-                <a href="{{ item.link.url }}">
-				    <dt class="flextensions-side-button elementor-repeater-item-{{ item._id }}" data-side="{{{ settings.side }}}">{{{ elementor.helpers.renderIcon( view, item.icon, { 'aria-hidden': true }, 'i', 'object' ).value }}}</dt>
-				    <dd class="elementor-repeater-item-{{ item._id }}"><div>{{{ item.content }}}</div></dd>
+                <a href="{{{ item.link.url }}}">
+				    <dt class="flextensions-side-button elementor-repeater-item-{{{ item._id }}}" data-side="{{{ settings.side }}}">{{{ elementor.helpers.renderIcon( view, item.icon, { 'aria-hidden': true }, 'i', 'object' ).value }}}</dt>
+				    <dd class="elementor-repeater-item-{{{ item._id }}}"><div>{{{ item.content }}}</div></dd>
                 </a>
 			<# }); #>
 			</dl>

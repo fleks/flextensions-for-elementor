@@ -1,0 +1,18 @@
+.flextensions-all-animations-hover-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.flextensions-all-animations-hover-box {
+    flex: 1 1 250px;
+    text-align: center;
+}
+
+.flextensions-all-animations-motion-container {
+    width: 100%
+}
+
+.flextensions-all-animations-motion-box {
+    width: 100%;
+    text-align: center;
+}
