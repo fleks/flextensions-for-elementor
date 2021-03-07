@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) || die();
 /**
  * Flextensions_SideButtons widget class.
  *
- * @since 1.0.0
+ * @since 1.0.1
  */
 class Flextensions_SideButtons extends Widget_Base {
 	/**
@@ -45,13 +45,13 @@ class Flextensions_SideButtons extends Widget_Base {
 	 public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
 
-		wp_register_script( 'flextensions-side-buttons', plugins_url( '/assets/js/flextensions-side-buttons.js', FLEXTENSIONS ), array(), '1.0.0' );
+		wp_register_script( 'flextensions-side-buttons', plugins_url( '/assets/js/flextensions-side-buttons.js?t=' . time(), FLEXTENSIONS ), array(), '1.0.0' );
 	}
 
 	/**
 	 * Retrieve the widget name.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 *
 	 * @access public
 	 *
@@ -64,7 +64,7 @@ class Flextensions_SideButtons extends Widget_Base {
 	/**
 	 * Retrieve the widget title.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 *
 	 * @access public
 	 *
@@ -77,7 +77,7 @@ class Flextensions_SideButtons extends Widget_Base {
 	/**
 	 * Retrieve the widget icon.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 *
 	 * @access public
 	 *
@@ -95,7 +95,7 @@ class Flextensions_SideButtons extends Widget_Base {
 	 * Note that currently Elementor supports only one category.
 	 * When multiple categories passed, Elementor uses the first one.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 *
 	 * @access public
 	 *
@@ -108,9 +108,9 @@ class Flextensions_SideButtons extends Widget_Base {
 	/**
 	 * Enqueue styles.
 	 */
-	public function get_style_depends() {
-		//return array( 'flextensions-side-buttons' );
-	}
+	/* public function get_style_depends() {
+		return array( 'flextensions-side-buttons' );
+	}*/
 
     /**
 	 * Enqueue scripts.
@@ -138,7 +138,7 @@ class Flextensions_SideButtons extends Widget_Base {
 	 *
 	 * Adds different input fields to allow the user to change and customize the widget settings.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 *
 	 * @access protected
 	 */
@@ -969,7 +969,7 @@ class Flextensions_SideButtons extends Widget_Base {
 	 *
 	 * Written in PHP and used to generate the final HTML.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 *
 	 * @access protected
 	 */
@@ -978,6 +978,7 @@ class Flextensions_SideButtons extends Widget_Base {
 
 		if ( $settings['list'] ) {
 			echo '<dl>';
+
 			foreach (  $settings['list'] as $item ) {
                 $target = $item['link']['is_external'] ? ' target="_blank"' : '';
 		        $nofollow = $item['link']['nofollow'] ? ' rel="nofollow"' : '';
@@ -995,7 +996,7 @@ class Flextensions_SideButtons extends Widget_Base {
 	 *
 	 * Written as a Backbone JavaScript template and used to generate the live preview.
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 *
 	 * @access protected
 	 */
@@ -1004,9 +1005,9 @@ class Flextensions_SideButtons extends Widget_Base {
 		<# if ( settings.list.length ) { #>
             <dl>
 			<# _.each( settings.list, function( item ) { #>
-                <a href="{{{ item.link.url }}}">
-				    <dt class="flextensions-side-button elementor-repeater-item-{{{ item._id }}}" data-side="{{{ settings.side }}}">{{{ elementor.helpers.renderIcon( view, item.icon, { 'aria-hidden': true }, 'i', 'object' ).value }}}</dt>
-				    <dd class="elementor-repeater-item-{{{ item._id }}}"><div>{{{ item.content }}}</div></dd>
+                <a href="{{ item.link.url }}">
+				    <dt class="flextensions-side-button elementor-repeater-item-{{ item._id }}" data-side="{{{ settings.side }}}">{{{ elementor.helpers.renderIcon( view, item.icon, { 'aria-hidden': true }, 'i', 'object' ).value }}}</dt>
+				    <dd class="elementor-repeater-item-{{ item._id }}"><div>{{{ item.content }}}</div></dd>
                 </a>
 			<# }); #>
 			</dl>

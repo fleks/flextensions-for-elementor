@@ -103,9 +103,9 @@ class Flextensions_TopArrow extends Widget_Base {
 	/**
 	 * Enqueue styles.
 	 */
-	public function get_style_depends() {
-		// return array( 'flextensions-top-arrow' );
-	}
+	/*	public function get_style_depends() {
+		return array( 'flextensions-top-arrow' );
+	} */
 
 	/**
 	 * Register the widget controls.
