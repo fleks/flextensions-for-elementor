@@ -414,7 +414,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} dl a:hover, {{WRAPPER}} dl a.hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} dl a.hover' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -426,7 +426,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} a:hover dt, {{WRAPPER}} a:hover dd, {{WRAPPER}} a.hover dt, {{WRAPPER}} a.hover dd' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} a.hover dt, {{WRAPPER}} a.hover dd' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -436,7 +436,7 @@ class Flextensions_SideButtons extends Widget_Base {
 			[
 				'name' => 'icon_shadow_hover',
 				'label' => __( 'Text Shadow', 'elementor' ) . ' Hover',
-				'selector' => '{{WRAPPER}} a:hover dt, {{WRAPPER}} a:hover dd, {{WRAPPER}} a.hover dt, {{WRAPPER}} a.hover dd',
+				'selector' => '{{WRAPPER}} a.hover dt, {{WRAPPER}} a.hover dd',
 			]
 		);
 
@@ -445,7 +445,7 @@ class Flextensions_SideButtons extends Widget_Base {
 			[
 				'name' => 'box_shadow_hover',
 				'label' => __( 'Box Shadow', 'elementor' ) . ' Hover',
-				'selector' => '{{WRAPPER}} a:hover dt, {{WRAPPER}} a:hover dd, {{WRAPPER}} a.hover dt, {{WRAPPER}} a.hover dd',
+				'selector' => '{{WRAPPER}} a.hover dt, {{WRAPPER}} a.hover dd',
 			]
 		);
 

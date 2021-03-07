@@ -21,6 +21,7 @@ jQuery( '.flextensions-side-button' ).each( function(i, obj) {
     jQuery( '.' + listPairs ).bind('mouseenter', function(e) {
         console.log( 'mouseenter' );
         if( touchDown != 1) {
+            jQuery( '.' + listPairs ).parent().addClass('hover');
             extend( '.' + listPairs, listSide, listSideDistance );
         }
         else {
@@ -29,17 +30,20 @@ jQuery( '.flextensions-side-button' ).each( function(i, obj) {
     });
     jQuery( '.' + listPairs ).bind('touchstart', function(e) {
         touchDown = 1;
-        clickCount[listPairs] = clickCount[listPairs] + 1;
 
-        if( clickCount[listPairs] == 1 ) {
+        if( clickCount[listPairs] == 0 ) {
             e.preventDefault();
             console.log( '1: ' + listPairs );
             retract( 'dt, dd', listSide );
             jQuery( '.' + listPairs ).parent().addClass('hover');
             extend( '.' + listPairs, listSide, listSideDistance );
+            clickCount[listPairs] = 1;
         }
-        else if( clickCount[listPairs] == 2 ) {
+        else if( clickCount[listPairs] == 1 ) {
             console.log( '2: ' + listPairs );
+            if ( jQuery( this ).hasClass( 'flextensions-side-button' ) ) {
+                e.preventDefault();
+            }
             retract( 'dt, dd', listSide );
             clickCount[listPairs] = 0;
         }
@@ -55,13 +59,14 @@ jQuery( '.flextensions-side-button' ).each( function(i, obj) {
     function retract( obj, side ) {
         jQuery( 'dt, dd' ).attr( 'style', side + ': 0px;' );
         jQuery( 'dt' ).parent().removeClass('hover');
-        for( var key in touchDown ) {
-            touchDown[ key ] = 0;
+        for( var key in clickCount ) {
+            clickCount[ key ] = 0;
         }
     }
 
     jQuery( '.' + listPairs ).bind('mouseleave', function() {
             retract( '.' + listPairs, listSide );
+            jQuery( '.' + listPairs ).parent().removeClass('hover')
     });
    /* jQuery( '.' + listPairs ).bind('touchend', function() {
         retract( '.' + listPairs, listSide );
