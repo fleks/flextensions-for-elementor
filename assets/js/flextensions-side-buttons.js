@@ -45,11 +45,15 @@ jQuery('.flextensions-side-button').each(function (i, obj) {
             // If icon click action
             if (jQuery(this).hasClass('flextensions-side-button')) {
                 e.preventDefault();
-            }
-            // Retract item with dely of one sec
-            setTimeout(function() {
+                // Retract item immediatly
                 retract(listSide);
-            }, 1000);
+            }
+            else {
+                // Retract item with dely of one sec
+                setTimeout(function() {
+                    retract(listSide);
+                }, 1000);
+            }
             // Set click counter to default
             clickCount[listPairs] = 0;
         }
