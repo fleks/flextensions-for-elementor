@@ -1,6 +1,6 @@
 <?php
 /**
- * Flextensions_SideButtons class.
+ * Flextensions_FlexGallery class.
  *
  * @category   Class
  * @package    Flextensions
@@ -10,7 +10,7 @@
  * @license    https://opensource.org/licenses/GPL-3.0 GPL-3.0-only
  * @link       link(https://github.com/fleks/flextensions-for-elementor,
  *             Flextensions for Elementor on GitHub)
- * @since      1.0.1
+ * @since      1.0.2
  * php version 7.1
  */
 
@@ -19,11 +19,13 @@ namespace Flextensions\Widgets;
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Repeater;
+use Elementor\Utils;
 use Elementor\Icons_Manager;
 use Elementor\Group_Control_Typography;
 use Elementor\Core\Schemes\Typography;
 use Elementor\Group_Control_Text_Shadow;
 use Elementor\Group_Control_Box_Shadow;
+use Elementor\Group_Control_Image_Size;
 use Elementor\Core\Schemes\Color;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 
@@ -31,11 +33,11 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 defined( 'ABSPATH' ) || die();
 
 /**
- * Flextensions_SideButtons widget class.
+ * Flextensions_FlexGallery widget class.
  *
- * @since 1.0.1
+ * @since 1.0.2
  */
-class Flextensions_SideButtons extends Widget_Base {
+class Flextensions_FlexGallery extends Widget_Base {
 	/**
 	 * Class constructor.
 	 *
@@ -45,40 +47,40 @@ class Flextensions_SideButtons extends Widget_Base {
 	 public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
 
-		wp_register_style( 'flextensions-side-buttons', plugins_url( '/assets/css/flextensions-side-buttons.css', FLEXTENSIONS ), array(), '1.0.0' );
-		wp_register_script( 'flextensions-side-buttons', plugins_url( '/assets/js/flextensions-side-buttons.js', FLEXTENSIONS ), array(), '1.0.0' );
+		wp_register_style( 'flextensions-flex-gallery', plugins_url( '/assets/css/flextensions-flex-gallery.css', FLEXTENSIONS ), array(), '1.0.0' );
+		wp_register_script( 'flextensions-flex-gallery', plugins_url( '/assets/js/flextensions-flex-gallery.js', FLEXTENSIONS ), array(), '1.0.0' );
 	}
 
 	/**
 	 * Retrieve the widget name.
 	 *
-	 * @since 1.0.1
+	 * @since 1.0.2
 	 *
 	 * @access public
 	 *
 	 * @return string Widget name.
 	 */
 	public function get_name() {
-		return 'flextensions-side-buttons';
+		return 'flextensions-flex-gallery';
 	}
 
 	/**
 	 * Retrieve the widget title.
 	 *
-	 * @since 1.0.1
+	 * @since 1.0.2
 	 *
 	 * @access public
 	 *
 	 * @return string Widget title.
 	 */
 	public function get_title() {
-		return __( 'Side Buttons', 'flextensions' );
+		return __( 'Flex Gallery', 'flextensions' );
 	}
 
 	/**
 	 * Retrieve the widget icon.
 	 *
-	 * @since 1.0.1
+	 * @since 1.0.2
 	 *
 	 * @access public
 	 *
@@ -96,7 +98,7 @@ class Flextensions_SideButtons extends Widget_Base {
 	 * Note that currently Elementor supports only one category.
 	 * When multiple categories passed, Elementor uses the first one.
 	 *
-	 * @since 1.0.1
+	 * @since 1.0.2
 	 *
 	 * @access public
 	 *
@@ -110,14 +112,14 @@ class Flextensions_SideButtons extends Widget_Base {
 	 * Enqueue styles.
 	 */
 	public function get_style_depends() {
-		return array( 'flextensions-side-buttons' );
+		return array( 'flextensions-flex-gallery' );
 	}
 
     /**
 	 * Enqueue scripts.
 	 */
 	public function get_script_depends() {
-		return array( 'flextensions-side-buttons' );
+		return array( 'flextensions-flex-gallery' );
 	}
 
     /**
@@ -139,7 +141,7 @@ class Flextensions_SideButtons extends Widget_Base {
 	 *
 	 * Adds different input fields to allow the user to change and customize the widget settings.
 	 *
-	 * @since 1.0.1
+	 * @since 1.0.2
 	 *
 	 * @access protected
 	 */
@@ -156,19 +158,41 @@ class Flextensions_SideButtons extends Widget_Base {
         $repeater = new Repeater();
 
 		$repeater->add_control(
-			'icon',
+			'image',
 			[
-				'label' => __( 'Icon', 'elementor' ),
-				'type' => Controls_Manager::ICONS,
+				'label' => __( 'Choose Image', 'elementor' ),
+				'type' => Controls_Manager::MEDIA,
 				'default' => [
-					'value' => 'fas fa-phone-alt',
-					'library' => 'solid',
+					'url' => Utils::get_placeholder_image_src(),
 				],
 			]
-		);        
+		); 
 
 		$repeater->add_control(
-			'content',
+			'custom_dimension',
+			[
+				'label' => __( 'Image Dimension', 'elementor' ),
+				'type' => Controls_Manager::IMAGE_DIMENSIONS,
+				'description' => __( 'Crop the original image size to any custom size. Set custom width or height to keep the original size ratio.', 'plugin-name' ),
+				'default' => [
+					'width' => '',
+					'height' => '',
+				],
+			]
+		);
+
+		$repeater->add_group_control(
+			\Elementor\Group_Control_Image_Size::get_type(),
+			[
+				'name' => 'image_size', // // Usage: `{name}_size` and `{name}_custom_dimension`, in this case `thumbnail_size` and `thumbnail_custom_dimension`.
+				'exclude' => [ 'custom' ],
+				'include' => [],
+				'default' => 'large',
+			]
+		);		
+
+		$repeater->add_control(
+			'title',
             [
 				'label' => __( 'Content', 'elementor' ),
 				'type' => Controls_Manager::TEXT,
@@ -217,119 +241,14 @@ class Flextensions_SideButtons extends Widget_Base {
 				'fields' => $repeater->get_controls(),
 				'default' => [
 					[
-						'content' =>  __( 'Hidden Text', 'flextensions' ),
+						'title' =>  __( 'Image Title', 'flextensions' ),
 					],
 	    		],
-				'title_field' => '{{{ elementor.helpers.renderIcon( this, icon, {}, "i", "panel" ) || \'<i class="{{ icon }}" aria-hidden="true"></i>\' }}} {{{ content }}}',
+				'title_field' => '{{{ title }}}',
 		    ]
-		);
+		);		
 
-		$this->add_control(
-			'side',
-			[
-				'label' => __( 'Position', 'elementor' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'left' => [
-						'title' => __( 'Left', 'elementor-pro' ),
-						'icon' => 'eicon-h-align-left',
-					],
-					'right' => [
-						'title' => __( 'Right', 'elementor-pro' ),
-						'icon' => 'eicon-h-align-right',
-					],
-				],
-				'default' => 'right',
-				'toggle' => false,
-                'selectors' => [
-                    '{{WRAPPER}}' => 'position: fixed; width: auto;',
-                    '{{WRAPPER}} dt' => 'clear: both;',
-                    '{{WRAPPER}} dt, {{WRAPPER}} dd' => 'display: flex; position: relative; {{VALUE}}: 0px',
-                ],
-			]
-		);
 
-		$this->add_control(
-			'float',
-			[
-				'label' => __( 'Float', 'elementor' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'left' => [
-						'title' => __( 'Left', 'elementor-pro' ),
-						'icon' => 'eicon-h-align-left',
-					],
-					'right' => [
-						'title' => __( 'Right', 'elementor-pro' ),
-						'icon' => 'eicon-h-align-right',
-					],
-				],
-				'default' => 'left',
-				'toggle' => false,
-                'selectors' => [
-                    '{{WRAPPER}} dt, {{WRAPPER}} dd' => 'float: {{VALUE}};',
-                ],
-			]
-		);
-
-		$this->add_control(
-			'text_align',
-			[
-				'label' => __( 'Alignment Horizontal', 'flextensions' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'left' => [
-						'title' => __( 'Left', 'elementor' ),
-						'icon' => 'eicon-text-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'elementor' ),
-						'icon' => 'eicon-text-align-center',
-					],
-					'right' => [
-						'title' => __( 'Right', 'elementor' ),
-						'icon' => 'eicon-text-align-right',
-					],
-					'justify' => [
-						'title' => __( 'Justify', 'elementor' ),
-						'icon' => 'eicon-text-align-justify',
-					],                    
-				],
-				'default' => 'center',
-				'toggle' => false,
-                'selectors' => [
-                    '{{WRAPPER}} dt' => 'justify-content: center',
-                    '{{WRAPPER}} dd div' => 'width: 100%; text-align: {{VALUE}};',
-                ],
-			]
-		);      
-        
-		$this->add_control(
-			'vertical_align',
-			[
-				'label' => __( 'Alignment Vertical', 'flextensions' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'flex-start' => [
-						'title' => __( 'Top', 'elementor' ),
-						'icon' => 'eicon-v-align-top',
-					],
-					'center' => [
-						'title' => __( 'Middle', 'elementor' ),
-						'icon' => 'eicon-v-align-middle',
-					],
-					'flex-end' => [
-						'title' => __( 'Bottom', 'elementor' ),
-						'icon' => 'eicon-v-align-bottom',
-					],
-				],
-				'default' => 'middle',
-				'toggle' => false,
-                'selectors' => [
-                    '{{WRAPPER}} dt, {{WRAPPER}} dd' => 'align-items: {{VALUE}};',
-                ],
-			]
-		);         
 
         $this->end_controls_section();
 
@@ -350,44 +269,6 @@ class Flextensions_SideButtons extends Widget_Base {
 			]
 		);
 		
-		$this->add_control(
-			'color',
-			[
-				'label' => __( 'Primary Color', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'global' => [
-					'default' => Global_Colors::COLOR_TEXT,
-				],
-				'selectors' => [
-					'{{WRAPPER}} dl a' => 'color: {{VALUE}};',
-				],                
-			]
-		);
-
-		$this->add_control(
-			'background_color',
-			[
-				'label' => __( 'Background Color', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '',
-                'global' => [
-					'default' => Global_Colors::COLOR_ACCENT,
-				],  
-				'selectors' => [
-					'{{WRAPPER}} a dt, {{WRAPPER}} a dd' => 'background-color: {{VALUE}};',
-				],              
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Text_Shadow::get_type(),
-			[
-				'name' => 'icon_shadow',
-				'label' => __( 'Text Shadow', 'elementor' ),
-				'selector' => '{{WRAPPER}} a, {{WRAPPER}} a',
-			]
-		);
-        
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
@@ -406,40 +287,7 @@ class Flextensions_SideButtons extends Widget_Base {
 			  ]
 		);
 
-		$this->add_control(
-			'color_hover',
-			[
-				'label' => __( 'Primary Color', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '',
-				'selectors' => [
-					'{{WRAPPER}} dl a.hover' => 'color: {{VALUE}};',
-				],
-			]
-		);
-		
-		$this->add_control(
-			'background_color_hover',
-			[
-				'label' => __( 'Background Color', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '',
-				'selectors' => [
-					'{{WRAPPER}} a.hover dt, {{WRAPPER}} a.hover dd' => 'background-color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Text_Shadow::get_type(),
-			[
-				'name' => 'icon_shadow_hover',
-				'label' => __( 'Text Shadow', 'elementor' ) . ' Hover',
-				'selector' => '{{WRAPPER}} dl a.hover',
-			]
-		);
-
-        $this->add_group_control(
+	        $this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name' => 'box_shadow_hover',
@@ -853,7 +701,7 @@ class Flextensions_SideButtons extends Widget_Base {
 		);
         
     	$this->add_responsive_control(
-			'border_space_between',
+			'margin',
 			[
 				'label' => __( 'Space Between Vertical', 'flextensions' ),
 				'type' => Controls_Manager::SLIDER,
@@ -879,7 +727,7 @@ class Flextensions_SideButtons extends Widget_Base {
 					'size' => '',
 				],
 				'selectors' => [
-					'{{WRAPPER}} dt' => 'border-{{side.value}}-width: {{SIZE}}{{UNIT}}; border-{{side.value}}-style: solid;',
+					'{{WRAPPER}} img' => 'margin: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);        
@@ -968,7 +816,7 @@ class Flextensions_SideButtons extends Widget_Base {
 	 *
 	 * Written in PHP and used to generate the final HTML.
 	 *
-	 * @since 1.0.1
+	 * @since 1.0.2
 	 *
 	 * @access protected
 	 */
@@ -976,17 +824,9 @@ class Flextensions_SideButtons extends Widget_Base {
 		$settings = $this->get_settings_for_display();
 
 		if ( $settings['list'] ) {
-			echo '<dl>';
-			
 			foreach (  $settings['list'] as $item ) {
-                $target = $item['link']['is_external'] ? ' target="_blank"' : '';
-		        $nofollow = $item['link']['nofollow'] ? ' rel="nofollow"' : '';
-				echo '<a href="' . $item['link']['url'] . '"' . $target . $nofollow . ' class="flextensions-side-button-link ' . $item['css_class'] . '"><dt class="flextensions-side-button elementor-item-' . $item['_id'] . '" data-side="' . $settings['side'] . '">';
-                \Elementor\Icons_Manager::render_icon( $item['icon'], [ 'aria-hidden' => 'true' ] );
-                echo '</dt>';
-				echo '<dd class="elementor-item-' . $item['_id'] . '"><div>' . $item['content'] . '</div></dd></a>';
+				echo \Elementor\Group_Control_Image_Size::get_attachment_image_html( $item, 'image_size', 'image' );
 			}
-			echo '</dl>';
 		}
 	}
 
@@ -995,22 +835,24 @@ class Flextensions_SideButtons extends Widget_Base {
 	 *
 	 * Written as a Backbone JavaScript template and used to generate the live preview.
 	 *
-	 * @since 1.0.1
+	 * @since 1.0.2
 	 *
 	 * @access protected
 	 */
 	protected function _content_template() {
 		?>
-		<# if ( settings.list.length ) { #>
-            <dl>
-			<# _.each( settings.list, function( item ) { #>
-                <a href="{{ item.link.url }}" class="flextensions-side-button-link {{ item.css_class }}">
-				    <dt class="flextensions-side-button elementor-repeater-item-{{ item._id }}" data-side="{{{ settings.side }}}">{{{ elementor.helpers.renderIcon( view, item.icon, { 'aria-hidden': true }, 'i', 'object' ).value }}}</dt>
-				    <dd class="elementor-repeater-item-{{ item._id }}"><div>{{{ item.content }}}</div></dd>
-                </a>
-			<# }); #>
-			</dl>
-		<# } #>
+		<# _.each( settings.list, function( item ) {
+		var image = {
+			id: item.image.id,
+			url: item.image.url,
+			size: item.image_size,
+			dimension: item.image_custom_dimension,
+			model: view.getEditModel()
+		};
+		var image_url = elementor.imagesManager.getImageUrl( image );
+		#>
+		<img src="{{{ image_url }}}" {{{ image.size }}}/>	
+		<# }); #>
 	<?php
 	}
 }

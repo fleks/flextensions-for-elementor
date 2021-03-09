@@ -11,7 +11,7 @@
  * @link       link(https://github.com/fleks/flextensions-for-elementor,
  *             Flextensions for Elementor on GitHub)
  * @since      1.0.0
- * php version 7.3
+ * php version 7.1
  */
 
 defined( 'ABSPATH' ) || die(); // Blocks direct access to the plugin PHP files.
@@ -40,7 +40,7 @@ final class Flextensions_Widgets {
 	 * @since 1.0.0
 	 * @var string Minimum PHP version required to run the plugin.
 	 */
-	const MINIMUM_PHP_VERSION = '7.0';
+	const MINIMUM_PHP_VERSION = '7.1';
 
 	/**
 	 * Constructor

@@ -11,7 +11,7 @@
  * @link       link(https://github.com/fleks/flextensions-for-elementor,
  *             Flextensions for Elementor on GitHub)
  * @since      1.0.0
- * php version 7.3
+ * php version 7.1
  */
 
 namespace Flextensions;
@@ -69,6 +69,7 @@ class Widgets {
 		require_once 'widgets/class-flextensions-all-controls.php';
 		require_once 'widgets/class-flextensions-all-animations.php';
 		require_once 'widgets/class-flextensions-side-buttons.php';
+		require_once 'widgets/class-flextensions-flex-gallery.php';
 	}
 
 	/**
@@ -88,6 +89,7 @@ class Widgets {
 		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_AllControls() );
 		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_AllAnimations() );
 		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_SideButtons() );
+		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_FlexGallery() );
 	}
 
 	/**
