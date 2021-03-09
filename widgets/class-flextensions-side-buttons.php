@@ -201,7 +201,7 @@ class Flextensions_SideButtons extends Widget_Base {
 		$repeater->add_control(
 			'css_class',
 			[
-				'label' => __( 'CSS Class', 'elementor' ),
+				'label' => __( 'Link CSS Class', 'elementor' ),
 				'type' => Controls_Manager::TEXT,
 				'prefix_class' => '',
 				'title' => __( 'Add your custom class WITHOUT the dot. e.g: my-class', 'elementor' ),
@@ -978,11 +978,11 @@ class Flextensions_SideButtons extends Widget_Base {
 
 		if ( $settings['list'] ) {
 			echo '<dl>';
-
+			
 			foreach (  $settings['list'] as $item ) {
                 $target = $item['link']['is_external'] ? ' target="_blank"' : '';
 		        $nofollow = $item['link']['nofollow'] ? ' rel="nofollow"' : '';
-				echo '<a href="' . $item['link']['url'] . '"' . $target . $nofollow . '><dt class="flextensions-side-button elementor-item-' . $item['_id'] . '" data-side="' . $settings['side'] . '">';
+				echo '<a href="' . $item['link']['url'] . '"' . $target . $nofollow . ' class="flextensions-side-button-link ' . $item['css_class'] . '"><dt class="flextensions-side-button elementor-item-' . $item['_id'] . '" data-side="' . $settings['side'] . '">';
                 \Elementor\Icons_Manager::render_icon( $item['icon'], [ 'aria-hidden' => 'true' ] );
                 echo '</dt>';
 				echo '<dd class="elementor-item-' . $item['_id'] . '"><div>' . $item['content'] . '</div></dd></a>';
@@ -1005,7 +1005,7 @@ class Flextensions_SideButtons extends Widget_Base {
 		<# if ( settings.list.length ) { #>
             <dl>
 			<# _.each( settings.list, function( item ) { #>
-                <a href="{{ item.link.url }}">
+                <a href="{{ item.link.url }}" class="flextensions-side-button-link {{ item.css_class }}">
 				    <dt class="flextensions-side-button elementor-repeater-item-{{ item._id }}" data-side="{{{ settings.side }}}">{{{ elementor.helpers.renderIcon( view, item.icon, { 'aria-hidden': true }, 'i', 'object' ).value }}}</dt>
 				    <dd class="elementor-repeater-item-{{ item._id }}"><div>{{{ item.content }}}</div></dd>
                 </a>
