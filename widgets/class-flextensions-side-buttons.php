@@ -45,7 +45,8 @@ class Flextensions_SideButtons extends Widget_Base {
 	 public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
 
-		wp_register_script( 'flextensions-side-buttons', plugins_url( '/assets/js/flextensions-side-buttons.js?t=' . time(), FLEXTENSIONS ), array(), '1.0.0' );
+		wp_register_style( 'flextensions-side-buttons', plugins_url( '/assets/css/flextensions-side-buttons.css', FLEXTENSIONS ), array(), '1.0.0' );
+		wp_register_script( 'flextensions-side-buttons', plugins_url( '/assets/js/flextensions-side-buttons.js', FLEXTENSIONS ), array(), '1.0.0' );
 	}
 
 	/**
@@ -108,9 +109,9 @@ class Flextensions_SideButtons extends Widget_Base {
 	/**
 	 * Enqueue styles.
 	 */
-	/* public function get_style_depends() {
+	public function get_style_depends() {
 		return array( 'flextensions-side-buttons' );
-	}*/
+	}
 
     /**
 	 * Enqueue scripts.
