@@ -168,26 +168,12 @@ class Flextensions_FlexGallery extends Widget_Base {
 			]
 		); 
 
-		$repeater->add_control(
-			'custom_dimension',
-			[
-				'label' => __( 'Image Dimension', 'elementor' ),
-				'type' => Controls_Manager::IMAGE_DIMENSIONS,
-				'description' => __( 'Crop the original image size to any custom size. Set custom width or height to keep the original size ratio.', 'plugin-name' ),
-				'default' => [
-					'width' => '',
-					'height' => '',
-				],
-			]
-		);
-
 		$repeater->add_group_control(
 			\Elementor\Group_Control_Image_Size::get_type(),
 			[
 				'name' => 'image_size', // // Usage: `{name}_size` and `{name}_custom_dimension`, in this case `thumbnail_size` and `thumbnail_custom_dimension`.
-				'exclude' => [ 'custom' ],
 				'include' => [],
-				'default' => 'large',
+				'default' => 'medium',
 			]
 		);		
 
@@ -233,6 +219,73 @@ class Flextensions_FlexGallery extends Widget_Base {
 			]
 		);
 
+    	$repeater->add_responsive_control(
+			'translateX',
+			[
+				'label' => __( 'TranslateX', 'flextensions' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'em', 'vw' ],
+				'range' => [
+					'px' => [
+						'min' => -100,
+						'max' => 100,
+					],
+					'%' => [
+						'min' => -100,
+						'max' => 100,
+					],
+					'em' => [
+						'min' => -10,
+						'max' => 10,
+						'step' => 0.1,
+					],
+					'vw' => [
+						'min' => -100,
+						'max' => 100,
+					],					
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => '0',
+				],
+			]
+		);
+
+		$repeater->add_responsive_control(
+			'translateY',
+			[
+				'label' => __( 'TranslateY', 'flextensions' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'em', 'vh' ],
+				'range' => [
+					'px' => [
+						'min' => -100,
+						'max' => 100,
+					],
+					'%' => [
+						'min' => -100,
+						'max' => 100,
+					],
+					'em' => [
+						'min' => -10,
+						'max' => 10,
+						'step' => 0.1,
+					],
+					'vh' => [
+						'min' => -100,
+						'max' => 100,
+					],					
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => '0',
+				],
+				'selectors' => [
+					'{{WRAPPER}} {{CURRENT_ITEM}}' => 'transform: translate({{translateX.SIZE}}{{translateX.UNIT}}, {{SIZE}}{{UNIT}})',
+				]
+			]
+		);		
+
 		$this->add_control(
 			'list',
 			[
@@ -248,7 +301,47 @@ class Flextensions_FlexGallery extends Widget_Base {
 		    ]
 		);		
 
+        $this->end_controls_section();
 
+		$this->start_controls_section(
+			'section_flexbox',
+			[
+				'label' => __( 'Flexbox', 'elementor' ),
+				'tab' => Controls_Manager::TAB_CONTENT,
+			]
+		);		
+
+		$this->add_control(
+			'flex_direction',
+			[
+				'label' => __( 'Alignment Vertical', 'flextensions' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'row' => [
+						'title' => __( 'Row', 'elementor' ),
+						'icon' => 'eicon-arrow-right',
+					],
+					'column' => [
+						'title' => __( 'Column', 'elementor' ),
+						'icon' => 'eicon-arrow-down',
+					],
+					'row-reverse' => [
+						'title' => __( 'Row Reverse', 'elementor' ),
+						'icon' => 'eicon-arrow-left',
+					],
+					'column-reverse' => [
+						'title' => __( 'Column Reverse', 'elementor' ),
+						'icon' => 'eicon-arrow-up',
+					],
+				],
+				'default' => 'row',
+				'toggle' => false,
+                'selectors' => [
+                    '{{WRAPPER}} .elementor-widget-container' => 'display: flex; flex-direction: {{VALUE}}; flex-wrap: wrap;  justify-content: center;',
+					'{{WRAPPER}} .elementor-widget-container div' => 'flex: 0 1 auto; line-height: 0px;',
+                ],
+			]
+		);         
 
         $this->end_controls_section();
 
@@ -274,7 +367,7 @@ class Flextensions_FlexGallery extends Widget_Base {
 			[
 				'name' => 'box_shadow',
 				'label' => __( 'Box Shadow', 'elementor' ),
-				'selector' => '{{WRAPPER}} a dt, {{WRAPPER}} a dd',
+				'selector' => '{{WRAPPER}} img',
 			]
 		);	        
 
@@ -292,7 +385,7 @@ class Flextensions_FlexGallery extends Widget_Base {
 			[
 				'name' => 'box_shadow_hover',
 				'label' => __( 'Box Shadow', 'elementor' ) . ' Hover',
-				'selector' => '{{WRAPPER}} a.hover dt, {{WRAPPER}} a.hover dd',
+				'selector' => '{{WRAPPER}} img:hover',
 			]
 		);
 
@@ -308,169 +401,6 @@ class Flextensions_FlexGallery extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'side_distance',
-			[
-				'label' => __( 'Distance Side', 'flextensions' ),
-				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', '%', 'em' ],
-				'range' => [
-					'px' => [
-						'min' => -50,
-						'max' => 200,
-					],
-					'%' => [
-						'min' => -5,
-						'max' => 100,
-					],
-					'em' => [
-						'min' => -5,
-						'max' => 100,
-						'step' => 0.1,
-					],	
-				],
-				'default' => [
-					'unit' => 'px',
-					'size' => 0,
-				],
-				'selectors' => [
-					'{{WRAPPER}}' => '{{side.value}}: calc( {{SIZE}}{{UNIT}} - {{width.size}}{{width.unit}} )',
-				],
-			]
-		);
-
-		$this->add_control(
-			'show_text',
-			[
-				'label' => __( 'Show Text - ignore Distance Side', 'flextensions' ),
-				'type' => \Elementor\Controls_Manager::SWITCHER,
-				'label_on' => __( 'Show', 'flextensions' ),
-				'label_off' => __( 'Hide', 'flextensions' ),
-    			'default' => 'no',
-				'selectors' => [
-					'{{WRAPPER}}' => '{{side.VALUE}}: 0px;',
-				],
-			]
-		);        
-
-		$this->add_responsive_control(
-			'top',
-			[
-				'label' => __( 'Distance Top', 'flextensions' ),
-				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', '%', 'vh' ],
-				'range' => [
-					'px' => [
-						'min' => 0,
-						'max' => 1000,
-						'step' => 1,
-					],
-					'%' => [
-						'min' => 0,
-						'max' => 100,
-					],
-					'vh' => [
-						'min' => 0,
-						'max' => 100,
-						'step' => 1,
-					],
-				],
-				'default' => [
-					'unit' => 'px',
-					'size' => '',
-				],
-				'selectors' => [
-					'{{WRAPPER}}' => 'top: {{SIZE}}{{UNIT}};',
-				],
-                'condition' => [
-                    'bottom[size]' => '',
-                ],                
-			]
-		);
-
-		$this->add_responsive_control(
-			'bottom',
-			[
-				'label' => __( 'Distance Bottom', 'flextensions' ),
-				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', '%', 'vh' ],
-				'range' => [
-					'px' => [
-						'min' => 0,
-						'max' => 1000,
-						'step' => 1,
-					],
-					'%' => [
-						'min' => 0,
-						'max' => 100,
-					],
-					'vh' => [
-						'min' => 0,
-						'max' => 100,
-						'step' => 1,
-					],
-				],
-				'default' => [
-					'unit' => 'px',
-					'size' => '',
-				],
-				'selectors' => [
-					'{{WRAPPER}}' => 'bottom: {{SIZE}}{{UNIT}};',
-				],
-                'condition' => [
-                    'top[size]' => '',
-                ],
-			]
-		);
-        
-		$this->add_control(
-			'position_anchor_top',
-			[
-				'label' => __( 'Position Anchor', 'flextensions' ),
-				'type' => \Elementor\Controls_Manager::SWITCHER,
-				'label_on' => __( 'Middle', 'flextensions' ),
-				'label_off' => __( 'Top', 'flextensions' ),
-    			'default' => 'no',
-				'selectors' => [
-					'{{WRAPPER}}' => 'transform: translate(0, -50%)',
-				],
-                'condition' => [
-                    'top[size]!' => '',
-                ],                
-			]
-		); 
-        
-		$this->add_control(
-			'position_anchor_bottom',
-			[
-				'label' => __( 'Position Anchor', 'flextensions' ),
-				'type' => \Elementor\Controls_Manager::SWITCHER,
-				'label_on' => __( 'Middle', 'flextensions' ),
-				'label_off' => __( 'Bottom', 'flextensions' ),
-    			'default' => 'no',
-				'selectors' => [
-					'{{WRAPPER}}' => 'transform: translate(0, 50%)',
-				],
-                'condition' => [
-                    'bottom[size]!' => '',
-                ],                
-			]
-		);           
-
-		$this->add_control(
-			'z_index',
-			[
-				'label' => __( 'Z-Index', 'elementor' ),
-				'type' => Controls_Manager::NUMBER,
-				'min' => 0,
-				'step' => 1,
-				'default' => 10,
-				'selectors' => [
-					'{{WRAPPER}}' => 'z-index: {{VALUE}};',
-				],
-			]
-		);
-
         $this->end_controls_section();
 
 		$this->start_controls_section(
@@ -480,165 +410,56 @@ class Flextensions_FlexGallery extends Widget_Base {
 			  'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
-
-		$this->add_responsive_control(
-			'icon_size',
-			[
-				'label' => __( 'Icon Size', 'elementor' ),
-				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', '%' ],
-				'range' => [
-					'px' => [
-						'min' => 0,
-						'max' => 100,
-						'step' => 1,
-					],
-					'%' => [
-						'min' => 0,
-						'max' => 100,
-					],
-					'em' => [
-						'min' => 0,
-						'max' => 100,
-                        'step' => 0.1,
-					],
-					'rm' => [
-						'min' => 0,
-						'max' => 100,
-                        'step' => 0.1,
-					],
-				],
-				'default' => [
-					'unit' => 'px',
-					'size' => 32,
-				],
-				'selectors' => [
-					'{{WRAPPER}} dt' => 'font-size: {{SIZE}}{{UNIT}}; text-align: center;',
-				],
-			]
-		);
-
-    	$this->add_responsive_control(
-			'icon_padding',
-			[
-				'label' => __( 'Icon Padding ', 'flextensions' ),
-				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', '%', 'em' ],
-				'range' => [
-					'px' => [
-						'min' => 0,
-						'max' => 100,
-						'step' => 1,
-					],
-					'%' => [
-						'min' => 0,
-						'max' => 100,
-					],
-					'em' => [
-						'min' => 0,
-						'max' => 100,
-						'step' => 0.1,
-					],	
-				],
-				'default' => [
-					'unit' => 'px',
-					'size' => 0,
-				],
-				'selectors' => [
-					'{{WRAPPER}} dt i' => 'padding: {{SIZE}}{{UNIT}}',
-				],
-			]
-		);
         
-    	$this->add_responsive_control(
-			'icon_container_width',
-			[
-				'label' => __( 'Icon Container Width', 'flextensions' ),
-				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', '%', 'em' ],
-				'range' => [
-					'px' => [
-						'min' => 0,
-						'max' => 100,
-						'step' => 1,
-					],
-					'%' => [
-						'min' => 0,
-						'max' => 100,
-					],
-					'em' => [
-						'min' => 0,
-						'max' => 100,
-						'step' => 0.1,
-					],	
-				],
-				'default' => [
-					'unit' => 'px',
-					'size' => 42,
-				],
-				'selectors' => [
-					'{{WRAPPER}} dt' => 'width: {{SIZE}}{{UNIT}}',
-				],
-			]
-		);
-
         $this->add_responsive_control(
 			'height',
 			[
-				'label' => __( 'Height', 'flextensions' ),
+				'label' => __( 'Height Max', 'flextensions' ),
 				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', '%', 'em' ],
+				'size_units' => [ 'px', '%', 'vh' ],
 				'range' => [
 					'px' => [
 						'min' => 0,
-						'max' => 100,
-						'step' => 1,
+						'max' => 1500,
+						'step' => 10,
 					],
 					'%' => [
 						'min' => 0,
 						'max' => 100,
+						'step' => 1,
 					],
-					'em' => [
+					'vh' => [
 						'min' => 0,
 						'max' => 100,
-						'step' => 0.1,
-					],	
+						'step' => 1,
+					],
 				],
 				'default' => [
 					'unit' => 'px',
-					'size' => 42,
+					'size' => '',
 				],
 				'selectors' => [
-                    '{{WRAPPER}} dt, {{WRAPPER}} dd' => 'height: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} img' => 'max-height: {{SIZE}}{{UNIT}};',
 				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'content_typography',
-				'label' => __( 'Typography', 'elementor' ),
-				'scheme' => Typography::TYPOGRAPHY_1,
-				'selector' => '{{WRAPPER}} a dd',
 			]
 		);
 
 		$this->add_responsive_control(
 			'width',
 			[
-				'label' => __( 'Width of Text', 'flextensions' ),
+				'label' => __( 'Width Max', 'flextensions' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%', 'vw' ],
 				'range' => [
 					'px' => [
 						'min' => 0,
-						'max' => 500,
-						'step' => 1,
+						'max' => 2000,
+						'step' => 10,
 					],
 					'%' => [
 						'min' => 0,
 						'max' => 100,
+						'step' => 1,
 					],
 					'vw' => [
 						'min' => 0,
@@ -648,62 +469,18 @@ class Flextensions_FlexGallery extends Widget_Base {
 				],
 				'default' => [
 					'unit' => 'px',
-					'size' => 5,
+					'size' => '',
 				],                
 				'selectors' => [
-					'{{WRAPPER}} dd' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} img' => 'max-width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
-    	$this->add_responsive_control(
-			'text_padding',
-			[
-				'label' => __( 'Text Padding', 'elementor' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', '%', 'rem'],
-				'selectors' => [
-					'{{WRAPPER}} dd' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);            
-        
-    	$this->add_responsive_control(
-			'space_between',
-			[
-				'label' => __( 'Space Between Horizontal', 'flextensions' ),
-				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', '%', 'em' ],
-				'range' => [
-					'px' => [
-						'min' => 0,
-						'max' => 100,
-						'step' => 1,
-					],
-					'%' => [
-						'min' => 0,
-						'max' => 100,
-					],
-					'em' => [
-						'min' => 0,
-						'max' => 100,
-						'step' => 0.1,
-					],	
-				],
-				'default' => [
-					'unit' => 'px',
-					'size' => 5,
-				],
-				'selectors' => [
-					'{{WRAPPER}} dl > a:not(:last-of-type) dt, {{WRAPPER}} dl > a:not(:last-of-type) dd' => 'margin-bottom: {{SIZE}}{{UNIT}}',
-				],
-			]
-		);
-        
-    	$this->add_responsive_control(
+   	$this->add_responsive_control(
 			'margin',
 			[
-				'label' => __( 'Space Between Vertical', 'flextensions' ),
+				'label' => __( 'Margin', 'flextensions' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%', 'em' ],
 				'range' => [
@@ -825,7 +602,9 @@ class Flextensions_FlexGallery extends Widget_Base {
 
 		if ( $settings['list'] ) {
 			foreach (  $settings['list'] as $item ) {
+				echo '<div class="elementor-repeater-item-' . $item['_id'] . '">';
 				echo \Elementor\Group_Control_Image_Size::get_attachment_image_html( $item, 'image_size', 'image' );
+				echo '</div>';
 			}
 		}
 	}
@@ -851,7 +630,9 @@ class Flextensions_FlexGallery extends Widget_Base {
 		};
 		var image_url = elementor.imagesManager.getImageUrl( image );
 		#>
-		<img src="{{{ image_url }}}" {{{ image.size }}}/>	
+		<div class="elementor-repeater-item-{{ item._id }}">
+			<img src="{{{ image_url }}}" {{{ image.size }}}/>	
+		</div>
 		<# }); #>
 	<?php
 	}
