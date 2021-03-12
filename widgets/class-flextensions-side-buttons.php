@@ -323,7 +323,7 @@ class Flextensions_SideButtons extends Widget_Base {
 						'icon' => 'eicon-v-align-bottom',
 					],
 				],
-				'default' => 'middle',
+				'default' => 'center',
 				'toggle' => false,
                 'selectors' => [
                     '{{WRAPPER}} dt, {{WRAPPER}} dd' => 'align-items: {{VALUE}};',

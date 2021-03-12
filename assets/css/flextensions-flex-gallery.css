@@ -1,0 +1,33 @@
+.direction-row .elementor-widget-container div:nth-child(1) {
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.direction-row .elementor-widget-container div:nth-child(2) {
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+.direction-row .elementor-widget-container div:nth-child(3) {
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+.direction-row .elementor-widget-container div:nth-child(4) {
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.direction-column .elementor-widget-container div:nth-child(1) {
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.direction-column .elementor-widget-container div:nth-child(2) {
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+.direction-column .elementor-widget-container div:nth-child(3) {
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+.direction-column .elementor-widget-container div:nth-child(4) {
+    justify-content: flex-start;
+    align-items: flex-start;
+}

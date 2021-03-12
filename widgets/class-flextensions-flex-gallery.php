@@ -24,6 +24,7 @@ use Elementor\Icons_Manager;
 use Elementor\Group_Control_Typography;
 use Elementor\Core\Schemes\Typography;
 use Elementor\Group_Control_Text_Shadow;
+use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Image_Size;
 use Elementor\Core\Schemes\Color;
@@ -48,7 +49,7 @@ class Flextensions_FlexGallery extends Widget_Base {
 		parent::__construct( $data, $args );
 
 		wp_register_style( 'flextensions-flex-gallery', plugins_url( '/assets/css/flextensions-flex-gallery.css', FLEXTENSIONS ), array(), '1.0.0' );
-		wp_register_script( 'flextensions-flex-gallery', plugins_url( '/assets/js/flextensions-flex-gallery.js', FLEXTENSIONS ), array(), '1.0.0' );
+		//wp_register_script( 'flextensions-flex-gallery', plugins_url( '/assets/js/flextensions-flex-gallery.js', FLEXTENSIONS ), array(), '1.0.0' );
 	}
 
 	/**
@@ -87,7 +88,7 @@ class Flextensions_FlexGallery extends Widget_Base {
 	 * @return string Widget icon.
 	 */
 	public function get_icon() {
-		return 'eicon-toggle';
+		return 'eicon-shape';
 	}
 
 	/**
@@ -117,10 +118,10 @@ class Flextensions_FlexGallery extends Widget_Base {
 
     /**
 	 * Enqueue scripts.
-	 */
+	 */ /*
 	public function get_script_depends() {
 		return array( 'flextensions-flex-gallery' );
-	}
+	} */
 
     /**
 	 * Get widget keywords.
@@ -155,7 +156,30 @@ class Flextensions_FlexGallery extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'description',
+			[
+				'raw' => __( 'Optimized for four images', 'flextensions' ),
+				'type' => Controls_Manager::RAW_HTML,
+				'content_classes' => 'elementor-descriptor',
+			]
+		);		
+
         $repeater = new Repeater();
+
+		$repeater->add_control(
+			'title',
+            [
+				'label' => __( 'Title', 'elementor' ),
+				'type' => Controls_Manager::TEXT,
+				'label_block' => true,
+				'placeholder' => __( 'List Item', 'elementor' ),
+				'default' => __( 'List Item', 'elementor' ),
+                'dynamic' => [
+					'active' => true,
+				],
+			]
+		);		
 
 		$repeater->add_control(
 			'image',
@@ -169,7 +193,7 @@ class Flextensions_FlexGallery extends Widget_Base {
 		); 
 
 		$repeater->add_group_control(
-			\Elementor\Group_Control_Image_Size::get_type(),
+			Group_Control_Image_Size::get_type(),
 			[
 				'name' => 'image_size', // // Usage: `{name}_size` and `{name}_custom_dimension`, in this case `thumbnail_size` and `thumbnail_custom_dimension`.
 				'include' => [],
@@ -177,47 +201,95 @@ class Flextensions_FlexGallery extends Widget_Base {
 			]
 		);		
 
-		$repeater->add_control(
-			'title',
-            [
-				'label' => __( 'Content', 'elementor' ),
-				'type' => Controls_Manager::TEXT,
-				'label_block' => true,
-				'placeholder' => __( 'List Item', 'elementor' ),
-				'default' => __( 'List Item', 'elementor' ),
-                'dynamic' => [
-					'active' => true,
-				],
-			]
-		);
-
-		$repeater->add_control(
-			'link',
-            [
-				'label' => __( 'Link', 'elementor' ),
-				'type' => \Elementor\Controls_Manager::URL,
-				'placeholder' => 'https://your-link.com',
-				'show_external' => true,
-				'default' => [
-					'url' => '#',
-					'is_external' => false,
-					'nofollow' => false,
-				],
-				'dynamic' => [
-					'active' => true,
-				],                
-			]
-		);
-
-		$repeater->add_control(
-			'css_class',
+		$repeater->add_responsive_control(
+			'flex_basis',
 			[
-				'label' => __( 'Link CSS Class', 'elementor' ),
-				'type' => Controls_Manager::TEXT,
-				'prefix_class' => '',
-				'title' => __( 'Add your custom class WITHOUT the dot. e.g: my-class', 'elementor' ),
+				'label' => __( 'Flex-Basis', 'flextensions' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'vw', 'vh', ],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 2000,
+						'step' => 10,
+					],
+					'%' => [
+						'min' => 0,
+						'max' => 100,
+						'step' => 1,
+					],
+					'vw' => [
+						'min' => 0,
+						'max' => 100,
+						'step' => 1,
+					],
+					'vh' => [
+						'min' => 0,
+						'max' => 100,
+						'step' => 1,
+					],					
+				],
+				'default' => [
+					'unit' => '%',
+					'size' => 50,
+				],                
+				'selectors' => [
+					'{{WRAPPER}} {{CURRENT_ITEM}}' => 'display: flex; flex-basis: {{SIZE}}{{UNIT}};',
+				],
 			]
 		);
+
+        $repeater->add_control(
+			'text_align',
+			[
+				'label' => __( 'Alignment Horizontal', 'flextensions' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'flex-start' => [
+						'title' => __( 'Left', 'elementor' ),
+						'icon' => 'eicon-text-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'elementor' ),
+						'icon' => 'eicon-text-align-center',
+					],
+					'flex-end' => [
+						'title' => __( 'Right', 'elementor' ),
+						'icon' => 'eicon-text-align-right',
+					],                
+				],
+				'toggle' => true,
+                'selectors' => [
+                    '{{WRAPPER}} {{CURRENT_ITEM}}' => 'justify-content: {{VALUE}};',
+                ],
+			]
+		);      
+        
+		$repeater->add_control(
+			'vertical_align',
+			[
+				'label' => __( 'Alignment Vertical', 'flextensions' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'flex-start' => [
+						'title' => __( 'Top', 'elementor' ),
+						'icon' => 'eicon-v-align-top',
+					],
+					'center' => [
+						'title' => __( 'Middle', 'elementor' ),
+						'icon' => 'eicon-v-align-middle',
+					],
+					'flex-end' => [
+						'title' => __( 'Bottom', 'elementor' ),
+						'icon' => 'eicon-v-align-bottom',
+					],
+				],
+				'toggle' => true,
+                'selectors' => [
+                    '{{WRAPPER}} {{CURRENT_ITEM}}' => 'align-items: {{VALUE}};',
+                ],
+			]
+		); 		
 
     	$repeater->add_responsive_control(
 			'translateX',
@@ -284,12 +356,40 @@ class Flextensions_FlexGallery extends Widget_Base {
 					'{{WRAPPER}} {{CURRENT_ITEM}}' => 'transform: translate({{translateX.SIZE}}{{translateX.UNIT}}, {{SIZE}}{{UNIT}})',
 				]
 			]
-		);		
+		);
+
+		$repeater->add_control(
+			'link',
+            [
+				'label' => __( 'Link', 'elementor' ),
+				'type' => \Elementor\Controls_Manager::URL,
+				'placeholder' => 'https://your-link.com',
+				'show_external' => true,
+				'default' => [
+					'url' => '#',
+					'is_external' => false,
+					'nofollow' => false,
+				],
+				'dynamic' => [
+					'active' => true,
+				],                
+			]
+		);
+
+		$repeater->add_control(
+			'css_class',
+			[
+				'label' => __( 'Link CSS Class', 'elementor' ),
+				'type' => Controls_Manager::TEXT,
+				'prefix_class' => '',
+				'title' => __( 'Add your custom class WITHOUT the dot. e.g: my-class', 'elementor' ),
+			]
+		);
 
 		$this->add_control(
 			'list',
 			[
-				'label' => __( 'Buttons', 'elementor' ),
+				'label' => __( 'Images', 'elementor' ),
 				'type' => Controls_Manager::REPEATER,
 				'fields' => $repeater->get_controls(),
 				'default' => [
@@ -306,10 +406,78 @@ class Flextensions_FlexGallery extends Widget_Base {
 		$this->start_controls_section(
 			'section_flexbox',
 			[
-				'label' => __( 'Flexbox', 'elementor' ),
+				'label' => __( 'Toolbox', 'elementor' ),
 				'tab' => Controls_Manager::TAB_CONTENT,
 			]
-		);		
+		);
+
+		$this->add_responsive_control(
+			'width_max',
+			[
+				'label' => __( 'Container Max Width', 'flextensions' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'vw', 'vh' ],
+				'range' => [
+					'px' => [
+						'min' => 100,
+						'max' => 2000,
+					],
+					'%' => [
+						'min' => 0,
+						'max' => 100,
+					],
+					'vw' => [
+						'min' => 0,
+						'max' => 100,
+					],
+					'vw' => [
+						'min' => 0,
+						'max' => 100,
+					],					
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => '',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-widget-container' => 'max-width: {{SIZE}}{{UNIT}}',
+				]
+			]
+		);
+		
+		$this->add_responsive_control(
+			'height_max',
+			[
+				'label' => __( 'Container Max Height', 'flextensions' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'vw', 'vh' ],
+				'range' => [
+					'px' => [
+						'min' => 100,
+						'max' => 2000,
+					],
+					'%' => [
+						'min' => 0,
+						'max' => 100,
+					],
+					'vw' => [
+						'min' => 0,
+						'max' => 100,
+					],
+					'vw' => [
+						'min' => 0,
+						'max' => 100,
+					],					
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => '',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-widget-container' => 'max-height: {{SIZE}}{{UNIT}}',
+				]
+			]
+		);			
 
 		$this->add_control(
 			'flex_direction',
@@ -325,30 +493,62 @@ class Flextensions_FlexGallery extends Widget_Base {
 						'title' => __( 'Column', 'elementor' ),
 						'icon' => 'eicon-arrow-down',
 					],
-					'row-reverse' => [
-						'title' => __( 'Row Reverse', 'elementor' ),
-						'icon' => 'eicon-arrow-left',
-					],
-					'column-reverse' => [
-						'title' => __( 'Column Reverse', 'elementor' ),
-						'icon' => 'eicon-arrow-up',
-					],
 				],
 				'default' => 'row',
 				'toggle' => false,
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-widget-container' => 'display: flex; flex-direction: {{VALUE}}; flex-wrap: wrap;  justify-content: center;',
-					'{{WRAPPER}} .elementor-widget-container div' => 'flex: 0 1 auto; line-height: 0px;',
+                    '{{WRAPPER}} .elementor-widget-container' => 'display: flex; flex-direction: {{VALUE}}; flex-wrap: wrap; justify-content: center;',
+					'{{WRAPPER}} .elementor-widget-container div' => 'line-height: 0px;',
                 ],
+				'classes' => 'elementor-control-start-end',
+				'prefix_class' => 'direction-'
 			]
-		);         
+		);
+		
+		$this->add_responsive_control(
+			'translate_all',
+			[
+				'label' => __( 'Translate All', 'flextensions' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'em', 'vh' ],
+				'range' => [
+					'px' => [
+						'min' => -100,
+						'max' => 100,
+					],
+					'%' => [
+						'min' => -100,
+						'max' => 100,
+					],
+					'em' => [
+						'min' => -10,
+						'max' => 10,
+						'step' => 0.1,
+					],
+					'vh' => [
+						'min' => -100,
+						'max' => 100,
+					],					
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => '0',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-widget-container div:nth-child(1)' => 'transform: translate( {{SIZE}}{{UNIT}}, {{SIZE}}{{UNIT}} )',
+					'{{WRAPPER}} .elementor-widget-container div:nth-child(2)' => 'transform: translate( calc( {{SIZE}}{{UNIT}} * (-1) ), {{SIZE}}{{UNIT}} )',
+					'{{WRAPPER}} .elementor-widget-container div:nth-child(3)' => 'transform: translate( {{SIZE}}{{UNIT}}, calc( {{SIZE}}{{UNIT}} * (-1) ) )',
+					'{{WRAPPER}} .elementor-widget-container div:nth-child(4)' => 'transform: translate( calc( {{SIZE}}{{UNIT}} * (-1) ), calc( {{SIZE}}{{UNIT}} * (-1) ) )',
+				]
+			]
+		);		
 
         $this->end_controls_section();
 
 		$this->start_controls_section(
-			'section_color',
+			'section_frame',
 			[
-				'label' => __( 'Color', 'elementor' ),
+				'label' => __( 'Frame', 'elementor' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -361,6 +561,27 @@ class Flextensions_FlexGallery extends Widget_Base {
 				'label' => __( 'Normal', 'elementor' ),
 			]
 		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'border',
+				'label' => __( 'Border', 'plugin-domain' ),
+				'selector' => '{{WRAPPER}} img',
+			]
+		);		
+
+		$this->add_control(
+			'border_radius',
+			[
+				'label' => __( 'Border Radius', 'elementor' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px' ],
+				'selectors' => [
+					'{{WRAPPER}} img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);		
 		
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
@@ -380,11 +601,34 @@ class Flextensions_FlexGallery extends Widget_Base {
 			  ]
 		);
 
-	        $this->add_group_control(
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'border_hover',
+				'label' => __( 'Border', 'plugin-domain' ),
+				'selector' => '{{WRAPPER}} img:hover',
+				'default' => '{{border_}}',
+			]
+		);			
+
+
+		$this->add_control(
+			'border_radius_hover',
+			[
+				'label' => __( 'Border Radius', 'elementor' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px' ],
+				'selectors' => [
+					'{{WRAPPER}} img:hover' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+	    $this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name' => 'box_shadow_hover',
-				'label' => __( 'Box Shadow', 'elementor' ) . ' Hover',
+				'label' => __( 'Box Shadow', 'elementor' ),
 				'selector' => '{{WRAPPER}} img:hover',
 			]
 		);
@@ -392,16 +636,6 @@ class Flextensions_FlexGallery extends Widget_Base {
 		$this->end_controls_tab();
 
 		$this->end_controls_section();        
-
-		$this->start_controls_section(
-			'section_position',
-			[
-				'label' => __( 'Position', 'elementor' ),
-				'tab' => Controls_Manager::TAB_STYLE,
-			]
-		);
-
-        $this->end_controls_section();
 
 		$this->start_controls_section(
 			'dimension_section',
@@ -509,35 +743,6 @@ class Flextensions_FlexGallery extends Widget_Base {
 			]
 		);        
 
-		$this->add_control(
-			'border_color',
-			[
-				'label' => __( 'Primary Color', 'elementor' ),
-				'type' => Controls_Manager::COLOR,
-				'global' => [
-					'default' => Global_Colors::COLOR_TEXT,
-				],
-				'selectors' => [
-					'{{WRAPPER}} dt' => 'border-{{side.value}}-color: {{VALUE}}',
-				],
-                'condition' => [
-                    'border_space_between!' => '',
-                ],             
-			]
-		);        
-
-		$this->add_control(
-			'border_radius',
-			[
-				'label' => __( 'Border Radius', 'elementor' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%' ],
-				'selectors' => [
-					'{{WRAPPER}} dt' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);
-
 		$this->end_controls_section();
 
 		$this->start_controls_section(
@@ -547,42 +752,14 @@ class Flextensions_FlexGallery extends Widget_Base {
 			  'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
-
-    	$this->add_control(
-			'transition',
-			[
-				'label' => __( 'Transition', 'elementor' ),
-				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'ms','s' ],
-				'range' => [
-					'ms' => [
-						'min' => 0,
-						'max' => 5000,
-						'step' => 100,
-					],
-                's' => [
-						'min' => 0,
-						'max' => 10,
-						'step' => 0.1,
-					],	
-				],
-				'default' => [
-					'unit' => 'ms',
-					'size' => 500,
-				],
-				'selectors' => [
-					'{{WRAPPER}} dt, {{WRAPPER}} dd' => 'transition: {{side.VALUE}} {{SIZE}}{{UNIT}}',
-				],
-			]
-		);        
-		
+/*
 		$this->add_control(
 			'hover_animation',
 			[
 				'label' => __( 'Hover Animation', 'elementor' ),
 				'type' => Controls_Manager::HOVER_ANIMATION,
             ]
-        );
+        ); */
 
 		$this->end_controls_section();
 
@@ -631,7 +808,7 @@ class Flextensions_FlexGallery extends Widget_Base {
 		var image_url = elementor.imagesManager.getImageUrl( image );
 		#>
 		<div class="elementor-repeater-item-{{ item._id }}">
-			<img src="{{{ image_url }}}" {{{ image.size }}}/>	
+			<img src="{{{ image_url }}}" {{{ item.image_size }}}/>	
 		</div>
 		<# }); #>
 	<?php
