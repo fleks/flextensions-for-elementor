@@ -1,33 +1,118 @@
-.direction-row .elementor-widget-container div:nth-child(1) {
+.direction-row .elementor-widget-container > div:nth-child(1) {
     justify-content: flex-end;
     align-items: flex-end;
 }
-.direction-row .elementor-widget-container div:nth-child(2) {
+.direction-row .elementor-widget-container > div:nth-child(2) {
     justify-content: flex-start;
     align-items: flex-end;
 }
-.direction-row .elementor-widget-container div:nth-child(3) {
+.direction-row .elementor-widget-container > div:nth-child(3) {
     justify-content: flex-end;
     align-items: flex-start;
 }
-.direction-row .elementor-widget-container div:nth-child(4) {
+.direction-row .elementor-widget-container > div:nth-child(4) {
     justify-content: flex-start;
     align-items: flex-start;
 }
 
-.direction-column .elementor-widget-container div:nth-child(1) {
+.direction-column .elementor-widget-container > div:nth-child(1) {
     justify-content: flex-end;
     align-items: flex-end;
 }
-.direction-column .elementor-widget-container div:nth-child(2) {
+.direction-column .elementor-widget-container > div:nth-child(2) {
     justify-content: flex-end;
     align-items: flex-start;
 }
-.direction-column .elementor-widget-container div:nth-child(3) {
+.direction-column .elementor-widget-container > div:nth-child(3) {
     justify-content: flex-start;
-    align-items: flex-end;
+    align-items: flex-end
 }
-.direction-column .elementor-widget-container div:nth-child(4) {
+.direction-column .elementor-widget-container > div:nth-child(4) {
     justify-content: flex-start;
     align-items: flex-start;
 }
+
+.hover-front:hover {
+    z-index: 9999;
+}
+/*
+
+.direction-row .elementor-widget-container > div:nth-child(1) {
+    justify-content: flex-end;
+    align-items: flex-end;
+    background-color: black !important;
+}
+.direction-row .elementor-widget-container > div:nth-child(2) {
+    justify-content: flex-start;
+    align-items: flex-end;
+    background-color: red !important;
+}
+.direction-row .elementor-widget-container > div:nth-child(3) {
+    justify-content: flex-end;
+    align-items: flex-start;
+    background-color: green !important;
+}
+.direction-row .elementor-widget-container > div:nth-child(4) {
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: blue !important;
+}
+
+.direction-column .elementor-widget-container > div:nth-child(1) {
+    justify-content: flex-end;
+    align-items: flex-end;
+    background-color: black !important;
+}
+.direction-column .elementor-widget-container > div:nth-child(2) {
+    justify-content: flex-end;
+    align-items: flex-start;
+    background-color: red !important;
+}
+.direction-column .elementor-widget-container > div:nth-child(3) {
+    justify-content: flex-start;
+    align-items: flex-end;
+    background-color: green !important;
+}
+.direction-column .elementor-widget-container > div:nth-child(4) {
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: blue !important;
+}
+
+.direction-row .elementor-widget-container > div {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+.direction-row .elementor-widget-container > div > div {
+
+    flex-shrink: 1;
+}
+
+.direction-column .elementor-widget-container > div {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+.direction-column .elementor-widget-container > div > div {
+
+    flex-shrink: 1;
+}
+
+/*
+@media (max-width: 768px) {
+    .direction-column .elementor-widget-container div:nth-child(1), .direction-column .elementor-widget-container div:nth-child(1) {
+        justify-content: center;
+        align-items: center;
+    }
+    .direction-column .elementor-widget-container div:nth-child(2), .direction-column .elementor-widget-container div:nth-child(2) {
+        justify-content: center;
+        align-items: center;
+    }
+    .direction-column .elementor-widget-container div:nth-child(3), .direction-column .elementor-widget-container div:nth-child(3) {
+        justify-content: center;
+        align-items: center;
+    }
+    .direction-column .elementor-widget-container div:nth-child(4), .direction-column .elementor-widget-container div:nth-child(4) {
+        justify-content: center;
+        align-items: center;
+    }
+}*/

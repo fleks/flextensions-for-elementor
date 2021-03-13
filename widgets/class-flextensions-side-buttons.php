@@ -156,12 +156,12 @@ class Flextensions_SideButtons extends Widget_Base {
         $repeater = new Repeater();
 
 		$repeater->add_control(
-			'icon',
+			'selected_icon',
 			[
 				'label' => __( 'Icon', 'elementor' ),
 				'type' => Controls_Manager::ICONS,
 				'default' => [
-					'value' => 'fas fa-phone-alt',
+					'value' => 'fa fa-phone',
 					'library' => 'solid',
 				],
 			]
@@ -199,16 +199,6 @@ class Flextensions_SideButtons extends Widget_Base {
 			]
 		);
 
-		$repeater->add_control(
-			'css_class',
-			[
-				'label' => __( 'Link CSS Class', 'elementor' ),
-				'type' => Controls_Manager::TEXT,
-				'prefix_class' => '',
-				'title' => __( 'Add your custom class WITHOUT the dot. e.g: my-class', 'elementor' ),
-			]
-		);
-
 		$this->add_control(
 			'list',
 			[
@@ -218,9 +208,13 @@ class Flextensions_SideButtons extends Widget_Base {
 				'default' => [
 					[
 						'content' =>  __( 'Hidden Text', 'flextensions' ),
+						'selected_icon' => [
+							'value' => 'fas fa-phone',
+							'library' => 'fa-solid',
+						],
 					],
 	    		],
-				'title_field' => '{{{ elementor.helpers.renderIcon( this, icon, {}, "i", "panel" ) || \'<i class="{{ icon }}" aria-hidden="true"></i>\' }}} {{{ content }}}',
+				'title_field' => '{{{ elementor.helpers.renderIcon( this, selected_icon, {}, "i", "panel" ) || \'<i class="{{ icon }}" aria-hidden="true"></i>\' }}} {{{ content }}}',
 		    ]
 		);
 
@@ -355,9 +349,7 @@ class Flextensions_SideButtons extends Widget_Base {
 			[
 				'label' => __( 'Primary Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
-				'global' => [
-					'default' => Global_Colors::COLOR_TEXT,
-				],
+				'default' => '#FFFFFF',
 				'selectors' => [
 					'{{WRAPPER}} dl a' => 'color: {{VALUE}};',
 				],                
@@ -369,10 +361,7 @@ class Flextensions_SideButtons extends Widget_Base {
 			[
 				'label' => __( 'Background Color', 'elementor' ),
 				'type' => Controls_Manager::COLOR,
-				'default' => '',
-                'global' => [
-					'default' => Global_Colors::COLOR_ACCENT,
-				],  
+				'default' => '#808080',
 				'selectors' => [
 					'{{WRAPPER}} a dt, {{WRAPPER}} a dd' => 'background-color: {{VALUE}};',
 				],              
@@ -498,7 +487,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				'type' => \Elementor\Controls_Manager::SWITCHER,
 				'label_on' => __( 'Show', 'flextensions' ),
 				'label_off' => __( 'Hide', 'flextensions' ),
-    			'default' => 'no',
+    			'default' => 'yes',
 				'selectors' => [
 					'{{WRAPPER}}' => '{{side.VALUE}}: 0px;',
 				],
@@ -582,7 +571,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				'type' => \Elementor\Controls_Manager::SWITCHER,
 				'label_on' => __( 'Middle', 'flextensions' ),
 				'label_off' => __( 'Top', 'flextensions' ),
-    			'default' => 'no',
+    			'default' => 'yes',
 				'selectors' => [
 					'{{WRAPPER}}' => 'transform: translate(0, -50%)',
 				],
@@ -599,7 +588,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				'type' => \Elementor\Controls_Manager::SWITCHER,
 				'label_on' => __( 'Middle', 'flextensions' ),
 				'label_off' => __( 'Bottom', 'flextensions' ),
-    			'default' => 'no',
+    			'default' => 'yes',
 				'selectors' => [
 					'{{WRAPPER}}' => 'transform: translate(0, 50%)',
 				],
@@ -726,7 +715,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				],
 				'default' => [
 					'unit' => 'px',
-					'size' => 42,
+					'size' => 51,
 				],
 				'selectors' => [
 					'{{WRAPPER}} dt' => 'width: {{SIZE}}{{UNIT}}',
@@ -758,7 +747,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				],
 				'default' => [
 					'unit' => 'px',
-					'size' => 42,
+					'size' => 48,
 				],
 				'selectors' => [
                     '{{WRAPPER}} dt, {{WRAPPER}} dd' => 'height: {{SIZE}}{{UNIT}};',
@@ -800,7 +789,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				],
 				'default' => [
 					'unit' => 'px',
-					'size' => 5,
+					'size' => 150,
 				],                
 				'selectors' => [
 					'{{WRAPPER}} dd' => 'width: {{SIZE}}{{UNIT}};',
@@ -844,7 +833,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				],
 				'default' => [
 					'unit' => 'px',
-					'size' => 5,
+					'size' => 15,
 				],
 				'selectors' => [
 					'{{WRAPPER}} dl > a:not(:last-of-type) dt, {{WRAPPER}} dl > a:not(:last-of-type) dd' => 'margin-bottom: {{SIZE}}{{UNIT}}',
@@ -876,10 +865,10 @@ class Flextensions_SideButtons extends Widget_Base {
 				],
 				'default' => [
 					'unit' => 'px',
-					'size' => '',
+					'size' => 3,
 				],
 				'selectors' => [
-					'{{WRAPPER}} dt' => 'border-{{side.value}}-width: {{SIZE}}{{UNIT}}; border-{{side.value}}-style: solid;',
+					'{{WRAPPER}} dt' => 'border-{{side.VALUE}}-width: {{SIZE}}{{UNIT}}; border-{{side.VALUE}}-style: solid;',
 				],
 			]
 		);        
@@ -887,17 +876,15 @@ class Flextensions_SideButtons extends Widget_Base {
 		$this->add_control(
 			'border_color',
 			[
-				'label' => __( 'Primary Color', 'elementor' ),
+				'label' => __( 'Vertical Space Color', 'flextensions' ),
 				'type' => Controls_Manager::COLOR,
-				'global' => [
-					'default' => Global_Colors::COLOR_TEXT,
-				],
-				'selectors' => [
-					'{{WRAPPER}} dt' => 'border-{{side.value}}-color: {{VALUE}}',
-				],
+				'default' => '#FFFFFF',
                 'condition' => [
-                    'border_space_between!' => '',
-                ],             
+                    'border_space_between[size]!' => '',
+                ],
+				'selectors' => [
+					'{{WRAPPER}} dt' => 'border-color: {{VALUE}}',
+				],
 			]
 		);        
 
@@ -978,11 +965,11 @@ class Flextensions_SideButtons extends Widget_Base {
 		if ( $settings['list'] ) {
 			echo '<dl>';
 			
-			foreach (  $settings['list'] as $item ) {
-                $target = $item['link']['is_external'] ? ' target="_blank"' : '';
-		        $nofollow = $item['link']['nofollow'] ? ' rel="nofollow"' : '';
-				echo '<a href="' . $item['link']['url'] . '"' . $target . $nofollow . ' class="flextensions-side-button-link ' . $item['css_class'] . '"><dt class="flextensions-side-button elementor-item-' . $item['_id'] . '" data-side="' . $settings['side'] . '">';
-                \Elementor\Icons_Manager::render_icon( $item['icon'], [ 'aria-hidden' => 'true' ] );
+			foreach (  $settings['list'] as $index => $item ) {
+				$link_key = 'link_' . $index;
+                $this->add_link_attributes( $link_key, $item['link'] );
+				echo '<a ' . $this->get_render_attribute_string( $link_key ) . '><dt class="flextensions-side-button elementor-item-' . $item['_id'] . '" data-side="' . $settings['side'] . '">';
+                \Elementor\Icons_Manager::render_icon( $item['selected_icon'], [ 'aria-hidden' => 'true' ] );
                 echo '</dt>';
 				echo '<dd class="elementor-item-' . $item['_id'] . '"><div>' . $item['content'] . '</div></dd></a>';
 			}
@@ -1001,16 +988,28 @@ class Flextensions_SideButtons extends Widget_Base {
 	 */
 	protected function _content_template() {
 		?>
-		<# if ( settings.list.length ) { #>
+		<# if ( settings.list ) {
+			var iconsHTML = {},
+				migrated = {};
+			#>
             <dl>
-			<# _.each( settings.list, function( item ) { #>
-                <a href="{{ item.link.url }}" class="flextensions-side-button-link {{ item.css_class }}">
-				    <dt class="flextensions-side-button elementor-repeater-item-{{ item._id }}" data-side="{{{ settings.side }}}">{{{ elementor.helpers.renderIcon( view, item.icon, { 'aria-hidden': true }, 'i', 'object' ).value }}}</dt>
+			<# _.each( settings.list, function( item, index ) {	#>
+                <a href="{{ item.link.url }}">
+				    <dt class="flextensions-side-button elementor-repeater-item-{{ item._id }}" data-side="{{{ settings.side }}}">
+					<#
+								iconsHTML[ index ] = elementor.helpers.renderIcon( view, item.selected_icon, { 'aria-hidden': true }, 'i', 'object' );
+								 #>
+									{{{ iconsHTML[ index ].value }}}
+					
+					</dt>
 				    <dd class="elementor-repeater-item-{{ item._id }}"><div>{{{ item.content }}}</div></dd>
                 </a>
 			<# }); #>
 			</dl>
 		<# } #>
 	<?php
+	}
+	public function on_import( $element ) {
+		return Icons_Manager::on_import_migration( $element, 'icon', 'selected_icon', true );
 	}
 }
