@@ -161,7 +161,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				'label' => __( 'Icon', 'elementor' ),
 				'type' => Controls_Manager::ICONS,
 				'default' => [
-					'value' => 'fa fa-phone',
+					'value' => 'fas fa-phone',
 					'library' => 'solid',
 				],
 			]
