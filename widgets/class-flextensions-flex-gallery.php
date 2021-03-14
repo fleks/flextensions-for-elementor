@@ -128,13 +128,13 @@ class Flextensions_FlexGallery extends Widget_Base {
 	 *
 	 * Retrieve the list of keywords the widget belongs to.
 	 *
-	 * @since 1.1.0
+	 * @since 1.0.2
 	 * @access public
 	 *
 	 * @return array Widget keywords.
 	 */
 	public function get_keywords() {
-		return [ 'icon list', 'icon', 'list' ];
+		return [ 'gallery', 'flextensions', 'flex gallery', 'fancy', 'images', 'pictures' ];
 	}    
 
 	/**

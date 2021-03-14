@@ -7,7 +7,7 @@
  * Plugin Name: Flextensions for Elementor
  * Description: Widgets 
  * Plugin URI:  https://github.com/fleks/flextensions-for-elementor
- * Version:     1.0.1
+ * Version:     1.0.3
  * Author:      Felix Herzog
  * Text Domain: flextensions
  */
