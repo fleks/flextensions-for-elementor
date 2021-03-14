@@ -879,6 +879,23 @@ class Flextensions_FlexGallery extends Widget_Base {
         );
 
 		$this->add_control(
+			'hover_animation_transition',
+			[
+				'label' => __( 'Transition Duration', 'elementor' ),
+				'type' => Controls_Manager::SLIDER,
+				'range' => [
+					'px' => [
+						'max' => 3,
+						'step' => 0.1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .flextensions-flex-gallery-item' => 'transition-duration: {{SIZE}}s',
+				],
+			]
+		);		
+
+		$this->add_control(
 			'hover_animation_hint',
 			[
 				'raw' => __( 'Hover Animation doesn\'t work properly with moves set.', 'flextensions' ),
@@ -894,13 +911,12 @@ class Flextensions_FlexGallery extends Widget_Base {
 				'type' => Controls_Manager::SWITCHER,
 				'label_on' => __( 'Yes', 'flextensions' ),
 				'label_off' => __( 'No', 'flextensions' ),
-				'return_value' => 'hover-front',
-				'default' => 'hover-front',
+				'return_value' => ' hover-front',
+				'default' => ' hover-front',
 			]
 		);
 
 		$this->end_controls_section();
-
 	}
 
 	/**
@@ -926,8 +942,8 @@ class Flextensions_FlexGallery extends Widget_Base {
 					$link_start = $link_end = '';
 				}
 
-				echo '<div class="elementor-repeater-item-' . $item['_id'] . ' flextensions-flex-gallery-item-container  ' . $settings['hover_front'] . '">';
-				echo '<div class="elementor-animation-' . $settings['hover_animation'] . '" style="display: inline-block">';
+				echo '<div class="elementor-repeater-item-' . $item['_id'] . ' flextensions-flex-gallery-item-container ' . $settings['hover_front'] . '">';
+				echo '<div class="flextensions-flex-gallery-item elementor-animation-' . $settings['hover_animation'] . '" style="display: inline-block">';
 				echo $link_start;
 				echo \Elementor\Group_Control_Image_Size::get_attachment_image_html( $item, 'image_size', 'image' );
 				echo $link_end;
@@ -967,8 +983,8 @@ class Flextensions_FlexGallery extends Widget_Base {
 			var link_end = '';
 		}
 		#>
-		<div class="elementor-repeater-item-{{ item._id }} flextensions-flex-gallery-item-container {{ settings.hover_front }}">
-			<div class="elementor-animation-{{ settings.hover_animation }}" style="display: inline-block">
+		<div class="elementor-repeater-item-{{ item._id }} flextensions-flex-gallery-item-container ">
+			<div class="elementor-animation-{{ settings.hover_animation }} {{ settings.hover_front }}" style="display: inline-block">
 				{{{ link_start }}} 
 					<img src="{{{ image_url }}}" class="{{{ item.image_size }}}"/>	
 				{{{ link_end }}}
