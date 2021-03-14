@@ -44,7 +44,7 @@ class Flextensions_MultilineHeading extends Widget_Base {
 	 public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
 
-		wp_register_style( 'flextensions-multiline-heading', plugins_url( '/assets/css/flextensions-multiline-heading.css', FLEXTENSIONS ), array(), '1.0.0' );
+		//wp_register_style( 'flextensions-multiline-heading', plugins_url( '/assets/css/flextensions-multiline-heading.css', FLEXTENSIONS ), array(), '1.0.0' );
 		//wp_register_script( 'flextensions-multiline-heading', plugins_url( '/assets/js/flextensions-multiline-heading.js', FLEXTENSIONS ), array(), '1.0.0' );
 	}
 
@@ -107,7 +107,7 @@ class Flextensions_MultilineHeading extends Widget_Base {
 	
 	/**
 	 * Enqueue styles.
-	 */
+	 *//*
 	public function get_style_depends() {
 		return array( 'flextensions-multiline-heading' );
 	}
