@@ -3,6 +3,24 @@ var clickCount = {};
 // Touch or not
 var touchDown = false;
 
+// Extend function
+function extend(obj, side, distance) {
+    // Extend item to full width
+    jQuery(obj).attr('style', side + ': calc( ( ' + distance + ' ) * ( -1 ) );');
+}
+
+// Retract function
+function retract(side) {
+    // Retract all items
+    jQuery('dt, dd').attr('style', side + ': 0px;');
+    // Remove hover class from all items
+    jQuery('dt').parent().removeClass('hover');
+    // Set all click counter to default
+    for (var key in clickCount) {
+        clickCount[key] = 0;
+    }
+}
+
 jQuery('.flextensions-side-button').each(function (i, obj) {
     // Get item ID-Class
     var listPairs = jQuery(obj).attr('class').replace('flextensions-side-button ', '');
@@ -64,22 +82,4 @@ jQuery('.flextensions-side-button').each(function (i, obj) {
         // Retract all items & remove hover class
         retract(listSide);
     });
-
-    // Extend function
-    function extend(obj, side, distance) {
-        // Extend item to full width
-        jQuery(obj).attr('style', side + ': calc( ( ' + distance + ' ) * ( -1 ) );');
-    }
-
-    // Retract function
-    function retract(side) {
-        // Retract all items
-        jQuery('dt, dd').attr('style', side + ': 0px;');
-        // Remove hover class from all items
-        jQuery('dt').parent().removeClass('hover');
-        // Set all click counter to default
-        for (var key in clickCount) {
-            clickCount[key] = 0;
-        }
-    }
 });

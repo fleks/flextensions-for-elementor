@@ -36,11 +36,10 @@
     pointer-events: none;
 }
 .hover-front:hover {
-    z-index: 10;
+    z-index: 100;
 }
 .hover-front > .flextensions-flex-gallery-item {
     pointer-events: auto;
-    z-index: 2;
 }
 /*
 

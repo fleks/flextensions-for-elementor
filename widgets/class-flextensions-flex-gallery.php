@@ -373,6 +373,18 @@ class Flextensions_FlexGallery extends Widget_Base {
 			]
 		);
 
+		$repeater->add_responsive_control(
+			'border_radius',
+			[
+				'label' => __( 'Border Radius', 'elementor' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} {{CURRENT_ITEM}} img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);			
+
 		$repeater->add_control(
 			'link',
             [
@@ -691,19 +703,7 @@ class Flextensions_FlexGallery extends Widget_Base {
 				'label' => __( 'Border', 'plugin-domain' ),
 				'selector' => '{{WRAPPER}} img',
 			]
-		);		
-
-		$this->add_control(
-			'border_radius',
-			[
-				'label' => __( 'Border Radius', 'elementor' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px' ],
-				'selectors' => [
-					'{{WRAPPER}} img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);		
+		);			
 		
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
@@ -911,8 +911,8 @@ class Flextensions_FlexGallery extends Widget_Base {
 				'type' => Controls_Manager::SWITCHER,
 				'label_on' => __( 'Yes', 'flextensions' ),
 				'label_off' => __( 'No', 'flextensions' ),
-				'return_value' => ' hover-front',
-				'default' => ' hover-front',
+				'return_value' => 'hover-front',
+				'default' => 'hover-front',
 			]
 		);
 
