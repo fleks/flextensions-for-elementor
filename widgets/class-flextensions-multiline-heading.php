@@ -690,19 +690,13 @@ class Flextensions_MultilineHeading extends Widget_Base {
 			$title_type . '_rotate',
 			[
 				'label' => __( 'Rotate', 'flextensions' ),
-				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'deg' ],
-				'range' => [
-					'deg' => [
-						'min' => -180,
-						'max' => 180,
-						'step' => 1,
-					],
-				],
-				'default' => [
-					'unit' => 'deg',
-					'size' => '0',
-				],
+				'type' => Controls_Manager::NUMBER,
+				'min' => -180,
+				'max' => 180,
+				'default' => 0,
+				'selectors' => [
+					'{{WRAPPER}} .' . $title_type . '-content' => '--title-rotate: {{VALUE}}deg;',
+				],	
 				'condition' => [
 					$title_type . '_transform' => 'yes',
                 ],
@@ -713,19 +707,13 @@ class Flextensions_MultilineHeading extends Widget_Base {
 			$title_type . '_skew',
 			[
 				'label' => __( 'Skew', 'flextensions' ),
-				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'deg' ],
-				'range' => [
-					'deg' => [
-						'min' => -180,
-						'max' => 180,
-						'step' => 1,
-					],
-				],
-				'default' => [
-					'unit' => 'deg',
-					'size' => '0',
-				],
+				'type' => Controls_Manager::NUMBER,
+				'min' => -90,
+				'max' => 90,
+				'default' => 0,
+				'selectors' => [
+					'{{WRAPPER}} .' . $title_type . '-content' => '--title-skew: {{VALUE}}deg;',
+				],								
 				'condition' => [
 					$title_type . '_transform' => 'yes',
                 ],
@@ -755,6 +743,9 @@ class Flextensions_MultilineHeading extends Widget_Base {
 				'default' => [
 					'unit' => 'px',
 					'size' => '0',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .' . $title_type . '-content' => '--title-translateX: {{SIZE}}{{UNIT}};',
 				],
 				'condition' => [
 					$title_type . '_transform' => 'yes',
@@ -786,6 +777,9 @@ class Flextensions_MultilineHeading extends Widget_Base {
 					'unit' => 'px',
 					'size' => '0',
 				],
+				'selectors' => [
+					'{{WRAPPER}} .' . $title_type . '-content' => '--title-translateY: {{SIZE}}{{UNIT}};',
+				],
                 'condition' => [
 					$title_type . '_transform' => 'yes',
                 ],				
@@ -812,8 +806,12 @@ class Flextensions_MultilineHeading extends Widget_Base {
 					],
 				],
 				'default' => 'center',
+				'toogle' => 'false',
 				'selectors' => [
-					'{{WRAPPER}} .' . $title_type . '-content' => 'transform-origin: {{VALUE}}; transform: rotate({{' . $title_type . '_rotate.SIZE}}{{' . $title_type . '_rotate.UNIT}}) skewX({{' . $title_type . '_skew.SIZE}}{{' . $title_type . '_skew.UNIT}}) translateX({{' . $title_type . '_translateX.SIZE}}{{' . $title_type . '_translateX.UNIT}}) translateY({{' . $title_type . '_translateY.SIZE}}{{' . $title_type . '_translateY.UNIT}})',
+					'{{WRAPPER}} .' . $title_type . '-content' => 'transform-origin: {{VALUE}}; transform: rotate(var(--title-rotate, 0)) skewX(var(--title-skew, 0)) translateX(var(--title-translateX, 0)) translateY(var(--title-translateY, 0));',
+				//	'(desktop){{WRAPPER}} .' . $title_type . '-content' => 'transform-origin: {{VALUE}}; transform: rotate({{' . $title_type . '_rotate.VALUE}}deg) skewX({{' . $title_type . '_skew.VALUE}}deg) translateX({{' . $title_type . '_translateX.SIZE}}{{' . $title_type . '_translateX.UNIT}}) translateY({{' . $title_type . '_translateY.SIZE}}{{' . $title_type . '_translateY.UNIT}})',
+				//	'(tablet){{WRAPPER}} .' . $title_type . '-content' => 'transform-origin: {{VALUE}}; transform: rotate({{' . $title_type . '_rotate_tablet.VALUE || ' . $title_type . '_rotate.VALUE}}deg) skewX({{' . $title_type . '_skew_tablet.VALUE || ' . $title_type . '_skew.VALUE}}deg) translateX({{' . $title_type . '_translateX_tablet.SIZE || ' . $title_type . '_translateX.SIZE}}{{' . $title_type . '_translateX_tablet.UNIT || ' . $title_type . '_translateX.UNIT}}) translateY({{' . $title_type . '_translateY_tablet.SIZE || ' . $title_type . '_translateY.SIZE}}{{' . $title_type . '_translateY_tablet.UNIT || ' . $title_type . '_translateY.UNIT}})',
+				//	'(mobile){{WRAPPER}} .' . $title_type . '-content' => 'transform-origin: {{VALUE}}; transform: rotate({{(' . $title_type . '_rotate_mobile.VALUE || ' . $title_type . '_rotate_tablet.VALUE) || ' . $title_type . '_rotate.VALUE }}deg);', // skewX({{' . $title_type . '_skew.VALUE}}deg) translateX({{' . $title_type . '_translateX.SIZE}}{{' . $title_type . '_translateX.UNIT}}) translateY({{' . $title_type . '_translateY.SIZE}}{{' . $title_type . '_translateY.UNIT}})',
 				],
                 'condition' => [
 					$title_type . '_transform' => 'yes',
