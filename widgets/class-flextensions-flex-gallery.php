@@ -380,6 +380,7 @@ class Flextensions_FlexGallery extends Widget_Base {
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
+					'{{WRAPPER}} {{CURRENT_ITEM}} > div' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} {{CURRENT_ITEM}} img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
@@ -431,15 +432,13 @@ class Flextensions_FlexGallery extends Widget_Base {
 		$this->add_control(
 			'show_divs',
 			[
-				'label' => __( 'Show Divs for Development', 'flextensions' ),
+				'label' => __( 'Show Container', 'flextensions' ),
 				'type' => Controls_Manager::SWITCHER,
+				'default' => '',
 				'label_on' => __( 'Yes', 'flextensions' ),
 				'label_off' => __( 'No', 'flextensions' ),
-				'default' => 'yes',
 				'selectors' => [
-					'{{WRAPPER}}' => 'background-color: #00000021;',
-					'{{WRAPPER}} .elementor-widget-container' => 'background-color: #00000022;',
-					'{{WRAPPER}} .elementor-widget-container > div ' => 'background-color: #00000023;'
+					'{{WRAPPER}}, {{WRAPPER}} .elementor-widget-container, {{WRAPPER}} .elementor-widget-container div' => 'background-color: rgba(0, 0, 0, 0.1);',
 				]
 			]
 		);		
@@ -912,7 +911,7 @@ class Flextensions_FlexGallery extends Widget_Base {
 				'label_on' => __( 'Yes', 'flextensions' ),
 				'label_off' => __( 'No', 'flextensions' ),
 				'return_value' => 'hover-front',
-				'default' => 'hover-front',
+				'default' => '',
 			]
 		);
 

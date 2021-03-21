@@ -69,8 +69,9 @@ class Widgets {
 		require_once 'widgets/class-flextensions-all-controls.php';
 		require_once 'widgets/class-flextensions-all-animations.php';
 		require_once 'widgets/class-flextensions-side-buttons.php';
-		require_once 'widgets/class-flextensions-flex-gallery.php';
 		require_once 'widgets/class-flextensions-multiline-heading.php';
+		require_once 'widgets/class-flextensions-flex-gallery.php';
+		
 	}
 
 	/**
@@ -89,9 +90,9 @@ class Widgets {
 		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_TopArrow() );
 		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_AllControls() );
 		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_AllAnimations() );
+		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_MultilineHeading() );
 		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_SideButtons() );
 		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_FlexGallery() );
-		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_MultilineHeading() );
 	}
 
 	/**

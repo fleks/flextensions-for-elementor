@@ -134,6 +134,12 @@ class Flextensions_MultilineHeading extends Widget_Base {
 	}    
 
 	/**
+	 * Setting different types of titles
+	 */
+	private $title_types = ['topline', 'heading', 'subheading'];
+
+
+	/**
 	 * Register the widget controls.
 	 *
 	 * Adds different input fields to allow the user to change and customize the widget settings.
@@ -144,29 +150,35 @@ class Flextensions_MultilineHeading extends Widget_Base {
 	 */
 	protected function _register_controls() {
 
+		$this->end_controls_section();
+
+		$title_types = $this->title_types;
+
+		foreach( $this->title_types as $title_type ) {
+
 		$this->start_controls_section(
-			'section_topline',
+			'section_' . $title_type,
 			[
-				'label' => __( 'Topline', 'elementor' ),
+				'label' => __( ucfirst($title_type), 'flextensions' ),
 				'tab' => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$this->add_control(
-			'topline',
+			$title_type,
 			[
-				'label' => __( 'Topline', 'flextensions' ),
-				'type' => \Elementor\Controls_Manager::TEXTAREA,
+				'label' => __( ucfirst($title_type), 'flextensions' ),
+				'type' => Controls_Manager::TEXTAREA,
                 'rows' => 2,
                 'dynamic' => [
 					'active' => true,
 				],
-				'default' => __( 'Default Topline', 'flextensions' ),
+				'default' => __( 'Default ' . ucfirst($title_type), 'flextensions' ),
             ]
 		);
 
 		$this->add_control(
-			'topline_tag',
+			$title_type . '_tag',
 			[
 				'label' => __( 'HTML Tag', 'elementor' ),
 				'type' => Controls_Manager::SELECT,
@@ -183,13 +195,13 @@ class Flextensions_MultilineHeading extends Widget_Base {
 				],
 				'default' => 'h3',
                 'condition' => [
-                    'topline!' => '',
+                    $title_type . '!' => '',
                 ],
 			]
 		);
 
 		$this->add_responsive_control(
-			'topline_align',
+			$title_type . '_align',
 			[
 				'label' => __( 'Alignment', 'elementor' ),
 				'type' => Controls_Manager::CHOOSE,
@@ -207,21 +219,53 @@ class Flextensions_MultilineHeading extends Widget_Base {
 						'icon' => 'eicon-text-align-right',
 					],
 				],
-				'default' => '',
+				'default' => 'center',
+				'toggle' => false,
 				'selectors' => [
-					'{{WRAPPER}} .topline' => 'text-align: {{VALUE}};',
+					'{{WRAPPER}} .' . $title_type => 'text-align: {{VALUE}};',
+					'{{WRAPPER}} .' . $title_type . '-container' => 'flex: 1 1 100%; display: flex;',
+					'{{WRAPPER}} .elementor-widget-container' => 'display: flex; flex-direction: row; flex-wrap: wrap;',
 				],
                 'condition' => [
-                    'topline!' => '',
-                ]
+                    $title_type . '!' => '',
+				],
 			]
 		);
 
+        $this->add_responsive_control(
+			$title_type . '_position',
+			[
+				'label' => __( 'Position', 'elementor' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'flex-start' => [
+						'title' => __( 'Left', 'elementor' ),
+						'icon' => 'eicon-h-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'elementor' ),
+						'icon' => 'eicon-h-align-center',
+					],
+					'flex-end' => [
+						'title' => __( 'Right', 'elementor' ),
+						'icon' => 'eicon-h-align-right',
+					],
+				],
+				'default' => 'center',
+				'selectors' => [
+					'{{WRAPPER}} .' . $title_type . '-container' => 'justify-content: {{VALUE}};',
+				],
+                'condition' => [
+                    $title_type . '!' => '',
+                ],
+			]
+		);		
+
 		$this->add_responsive_control(
-			'topline_width',
+			$title_type . '_width',
 			[
 				'label' => __( 'Width', 'flextensions' ),
-				'type' => \Elementor\Controls_Manager::SLIDER,
+				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
 				'range' => [
 					'px' => [
@@ -236,50 +280,82 @@ class Flextensions_MultilineHeading extends Widget_Base {
 				],
 				'default' => [
 					'unit' => '%',
-					'size' => 50,
+					'size' => 90,
 				],
 				'selectors' => [
-                    '{{WRAPPER}}' => '--topline-flex-basis: {{SIZE}}{{UNIT}}',
-					'{{WRAPPER}} .topline' => 'flex: 0 0 {{SIZE}}{{UNIT}}',
+                    '{{WRAPPER}}' => '--' . $title_type . '-flex-basis: {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}} .' . $title_type => 'flex: 0 0 {{SIZE}}{{UNIT}}',
 				],
                 'condition' => [
-                    'topline!' => '',
-                ]
+                    $title_type . '!' => '',
+				],
 			]
 		);
 
         $this->add_responsive_control(
-			'topline_width_min',
+			$title_type . '_width_min',
 			[
 				'label' => __( 'Min Width', 'flextensions' ),
 				'type' => \Elementor\Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
+				'size_units' => [ 'px', 'vw' ],
 				'range' => [
 					'px' => [
 						'min' => 0,
 						'max' => 2000,
 						'step' => 10,
 					],
-					'%' => [
+					'vw' => [
 						'min' => 0,
 						'max' => 100,
 					],
 				],
 				'default' => [
 					'unit' => 'px',
-					'size' => 320,
+					'size' => 300,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .topline' => 'min-width: 0 0 {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}} .' . $title_type => 'min-width: {{SIZE}}{{UNIT}}',
 				],
                 'condition' => [
-                    'topline_width[unit]' => '%',
+					$title_type . '!' => '',
+                    $title_type . '_width[unit]' => '%',
                 ]
 			]
 		);
 
+        $this->add_responsive_control(
+			$title_type . '_width_max',
+			[
+				'label' => __( 'Max Width', 'flextensions' ),
+				'type' => \Elementor\Controls_Manager::SLIDER,
+				'size_units' => [ 'px', 'vw' ],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 2000,
+						'step' => 10,
+					],
+					'vw' => [
+						'min' => 0,
+						'max' => 100,
+					],
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => '',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .' . $title_type => 'max-width: {{SIZE}}{{UNIT}}',
+				],
+                'condition' => [
+					$title_type . '!' => '',
+                    $title_type . '_width[unit]' => '%',
+                ]
+			]
+		);		
+
 		$this->add_control(
-			'topline_wordwrap',
+			$title_type . '_wordwrap',
 			[
 				'label' => __( 'Word Wrap', 'flextensions' ),
 				'type' => \Elementor\Controls_Manager::SWITCHER,
@@ -287,381 +363,467 @@ class Flextensions_MultilineHeading extends Widget_Base {
 				'label_off' => __( 'Yes', 'flextensions' ),
 				'default' => 'yes',
                 'selectors' => [
-					'{{WRAPPER}} .topline' => 'white-space: nowrap;',
+					'{{WRAPPER}} .' . $title_type => 'white-space: nowrap;',
+				],
+                'condition' => [
+                    $title_type . '!' => '',
 				],
 			]
 		);        
-
-        $this->add_responsive_control(
-			'topline_position',
-			[
-				'label' => __( 'Position', 'elementor' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'flex-start' => [
-						'title' => __( 'Left', 'elementor' ),
-						'icon' => 'eicon-h-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'elementor' ),
-						'icon' => 'eicon-h-align-center',
-					],
-					'flex-end' => [
-						'title' => __( 'Right', 'elementor' ),
-						'icon' => 'eicon-h-align-right',
-					],
-				],
-				'default' => '',
-				'selectors' => [
-					'{{WRAPPER}} .topline-container' => 'justify-content: {{VALUE}};',
-				],
-                'condition' => [
-                    'topline!' => '',
-                ],
-			]
-		);
-        
+   
 		$this->add_responsive_control(
-			'topline_margin',
+			$title_type . '_margin',
 			[
 				'label' => __( 'Margin', 'elementor' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%', 'rem' ],
 				'selectors' => [
-					'{{WRAPPER}} .topline' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .' . $title_type => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+                'condition' => [
+                    $title_type . '!' => '',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'topline_z_index',
+			$title_type . '_z_index',
 			[
 				'label' => __( 'Z-Index', 'elementor' ),
 				'type' => Controls_Manager::NUMBER,
 				'min' => 0,
 				'selectors' => [
-					'{{WRAPPER}} .topline' => 'z-index: {{VALUE}};',
-				],
-			]
-		);
-
-        $this->end_controls_section();
-
-		$this->start_controls_section(
-			'section_heading',
-			[
-				'label' => __( 'Heading', 'elementor' ),
-				'tab' => Controls_Manager::TAB_CONTENT,
-			]
-		);        
-        
-        $this->add_control(
-			'heading',
-			[
-				'label' => __( 'Heading', 'flextensions' ),
-				'type' => \Elementor\Controls_Manager::TEXTAREA,
-                'rows' => 2,
-                'dynamic' => [
-					'active' => true,
-				],
-				'default' => __( 'Default Heading', 'flextensions' ),
-				'separator' => 'before',
-                'selectors' => [
-                '{{WRAPPER}} .elementor-widget-container' => 'display: flex; flex-direction: row; flex-wrap: wrap; justify-content: {{VALUE}};',
-                '{{WRAPPER}} .topline-container, {{WRAPPER}} .heading-container, {{WRAPPER}} .subheading-container' => 'flex: 1 1 100%; display: flex;',
-                ],
-            ]
-		);
-
-		$this->add_control(
-			'heading_tag',
-			[
-				'label' => __( 'HTML Tag', 'elementor' ),
-				'type' => Controls_Manager::SELECT,
-				'options' => [
-					'h1' => 'H1',
-					'h2' => 'H2',
-					'h3' => 'H3',
-					'h4' => 'H4',
-					'h5' => 'H5',
-					'h6' => 'H6',
-					'div' => 'div',
-					'span' => 'span',
-					'p' => 'p',
-				],
-				'default' => 'h2',
-            ]
-        );
-
-		$this->add_responsive_control(
-			'heading_align',
-			[
-				'label' => __( 'Alignment', 'elementor' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'left' => [
-						'title' => __( 'Left', 'elementor' ),
-						'icon' => 'eicon-text-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'elementor' ),
-						'icon' => 'eicon-text-align-center',
-					],
-					'right' => [
-						'title' => __( 'Right', 'elementor' ),
-						'icon' => 'eicon-text-align-right',
-					],
-				],
-				'default' => '',
-				'selectors' => [
-					'{{WRAPPER}} .heading' => 'text-align: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'heading_width',
-			[
-				'label' => __( 'Width', 'flextensions' ),
-				'type' => \Elementor\Controls_Manager::SLIDER,
-				'size_units' => [ 'px', '%' ],
-				'range' => [
-					'px' => [
-						'min' => 0,
-						'max' => 2000,
-						'step' => 10,
-					],
-					'%' => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-				'default' => [
-					'unit' => '%',
-					'size' => 100,
-				],
-				'selectors' => [
-                    '{{WRAPPER}}' => '--heading-flex-basis: {{SIZE}}{{UNIT}}',
-					'{{WRAPPER}} .heading' => 'flex: 0 0 {{SIZE}}{{UNIT}}',
-				],
-			]
-		);
-
-		$this->add_control(
-			'heading_wordwrap',
-			[
-				'label' => __( 'Word Wrap', 'flextensions' ),
-				'type' => \Elementor\Controls_Manager::SWITCHER,
-				'label_on' => __( 'No', 'flextensions' ),
-				'label_off' => __( 'Yes', 'flextensions' ),
-				'default' => 'yes',
-                'selectors' => [
-					'{{WRAPPER}} .heading' => 'white-space: nowrap;',
-				],
-			]
-		);             
-
-		$this->add_responsive_control(
-			'heading_position',
-			[
-				'label' => __( 'Position', 'elementor' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'flex-start' => [
-						'title' => __( 'Left', 'elementor' ),
-						'icon' => 'eicon-h-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'elementor' ),
-						'icon' => 'eicon-h-align-center',
-					],
-					'flex-end' => [
-						'title' => __( 'Right', 'elementor' ),
-						'icon' => 'eicon-h-align-right',
-					],
-				],
-				'default' => '',
-				'selectors' => [
-					'{{WRAPPER}} .heading-container' => 'justify-content: {{VALUE}};',
+					'{{WRAPPER}} .' . $title_type => 'z-index: {{VALUE}};',
 				],
                 'condition' => [
-                    'heading!' => '',
-                ],
+                    $title_type . '!' => '',
+				],
 			]
 		);
+		$this->end_controls_section();
+	}
 
-        $this->end_controls_section();
+	$this->start_controls_section(
+		'section_container',
+		[
+			'label' => __( 'Container', 'elementor' ),
+			'tab' => Controls_Manager::TAB_CONTENT,
+		]
+	);
+
+	$this->add_control(
+		'container_show',
+		[
+			'label' => __('Show Container', 'flextensions'),
+			'type' => Controls_Manager::SWITCHER,
+			'default' => '',
+			'label_on'     => __( 'Yes', 'elementor' ),
+			'label_off'    => __( 'No', 'elementor' ),
+			'return_value' => 'yes',
+			'selectors' => [
+				'{{WRAPPER}} .elementor-widget-container div' => 'background-color: rgba(0, 0, 0, 0.1);'
+			],
+		]
+	);
+
+	$this->add_responsive_control(
+		'container_align',
+		[
+			'label' => __( 'Alignment', 'elementor' ),
+			'type' => Controls_Manager::CHOOSE,
+			'options' => [
+				'0 auto 0 0' => [
+					'title' => __( 'Left', 'elementor' ),
+					'icon' => 'eicon-text-align-left',
+				],
+				'0 auto' => [
+					'title' => __( 'Center', 'elementor' ),
+					'icon' => 'eicon-text-align-center',
+				],
+				'0 0 0 auto' => [
+					'title' => __( 'Right', 'elementor' ),
+					'icon' => 'eicon-text-align-right',
+				],
+			],
+			'default' => '0 auto',
+			'selectors' => [
+				'{{WRAPPER}} .elementor-widget-container' => 'margin: {{VALUE}}',
+			],
+		]
+	);		
+
+	$this->add_responsive_control(
+		'container_width',
+		[
+			'label' => __( 'Width', 'flextensions' ),
+			'type' => Controls_Manager::SLIDER,
+			'size_units' => [ 'px', '%' ],
+			'range' => [
+				'px' => [
+					'min' => 0,
+					'max' => 2000,
+					'step' => 10,
+				],
+				'%' => [
+					'min' => 0,
+					'max' => 100,
+				],
+			],
+			'default' => [
+				'unit' => '%',
+				'size' => 90,
+			],
+			'selectors' => [
+				'{{WRAPPER}} .elementor-widget-container' => 'width: {{SIZE}}{{UNIT}}',
+			],
+		]
+	);
+
+	$this->add_responsive_control(
+		'container_width_min',
+		[
+			'label' => __( 'Min Width', 'flextensions' ),
+			'type' => \Elementor\Controls_Manager::SLIDER,
+			'size_units' => [ 'px', 'vw' ],
+			'range' => [
+				'px' => [
+					'min' => 0,
+					'max' => 2000,
+					'step' => 10,
+				],
+				'vw' => [
+					'min' => 0,
+					'max' => 100,
+				],
+			],
+			'default' => [
+				'unit' => 'px',
+				'size' => 320,
+			],
+			'selectors' => [
+				'{{WRAPPER}} .elementor-widget-container' => 'min-width: {{SIZE}}{{UNIT}}',
+			],
+			'condition' => [
+				'container_width[size]!' => '',
+				'container_width[unit]' => '%',
+			]
+		]
+	);
+
+	$this->add_responsive_control(
+		'container_width_max',
+		[
+			'label' => __( 'Max Width', 'flextensions' ),
+			'type' => \Elementor\Controls_Manager::SLIDER,
+			'size_units' => [ 'px', 'vw' ],
+			'range' => [
+				'px' => [
+					'min' => 0,
+					'max' => 2000,
+					'step' => 10,
+				],
+				'vw' => [
+					'min' => 0,
+					'max' => 100,
+				],
+			],
+			'default' => [
+				'unit' => 'px',
+				'size' => '',
+			],
+			'selectors' => [
+				'{{WRAPPER}} .elementor-widget-container' => 'max-width: {{SIZE}}{{UNIT}}',
+			],
+			'condition' => [
+				'container_width[size]!' => '',
+				'container_width[unit]' => '%',
+			]
+		]
+	);
+
+       $this->end_controls_section();
+	   
+	   foreach( $this->title_types as $title_type ) {
 
 		$this->start_controls_section(
-			'section_subheading',
+			'section_style_' . $title_type,
 			[
-				'label' => __( 'Subheading', 'elementor' ),
-				'tab' => Controls_Manager::TAB_CONTENT,
-			]
-		);         
-
-		$this->add_control(
-			'subheading',
-			[
-				'label' => __( 'Subheading', 'flextensions' ),
-				'type' => \Elementor\Controls_Manager::TEXTAREA,
-                'rows' => 2,
-                'dynamic' => [
-					'active' => true,
-				],
-				'default' => __( 'Default Subheading', 'flextensions' ),
-				'separator' => 'before',
-			]
-		);
-        
-		$this->add_control(
-			'subheading_tag',
-			[
-				'label' => __( 'HTML Tag', 'elementor' ),
-				'type' => Controls_Manager::SELECT,
-				'options' => [
-					'h1' => 'H1',
-					'h2' => 'H2',
-					'h3' => 'H3',
-					'h4' => 'H4',
-					'h5' => 'H5',
-					'h6' => 'H6',
-					'div' => 'div',
-					'span' => 'span',
-					'p' => 'p',
-				],
-				'default' => 'h4',
-            ]
-        );
-    
-		$this->add_responsive_control(
-			'subheading_align',
-			[
-				'label' => __( 'Alignment', 'elementor' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'left' => [
-						'title' => __( 'Left', 'elementor' ),
-						'icon' => 'eicon-text-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'elementor' ),
-						'icon' => 'eicon-text-align-center',
-					],
-					'right' => [
-						'title' => __( 'Right', 'elementor' ),
-						'icon' => 'eicon-text-align-right',
-					],
-				],
-				'default' => '',
-				'selectors' => [
-					'{{WRAPPER}} .subheading' => 'text-align: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'subheading_width',
-			[
-				'label' => __( 'Width', 'flextensions' ),
-				'type' => \Elementor\Controls_Manager::SLIDER,
-				'size_units' => [ 'px', '%' ],
-				'range' => [
-					'px' => [
-						'min' => 0,
-						'max' => 2000,
-						'step' => 10,
-					],
-					'%' => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-				'default' => [
-					'unit' => '%',
-					'size' => 50,
-				],
-				'selectors' => [
-                    '{{WRAPPER}}' => '--subheading-flex-basis: {{SIZE}}{{UNIT}}',
-					'{{WRAPPER}} .subheading' => 'flex: 0 0 {{SIZE}}{{UNIT}}',
-				],
-			]
-		);
-
-		$this->add_control(
-			'subheading_wordwrap',
-			[
-				'label' => __( 'Word Wrap', 'flextensions' ),
-				'type' => \Elementor\Controls_Manager::SWITCHER,
-				'label_on' => __( 'No', 'flextensions' ),
-				'label_off' => __( 'Yes', 'flextensions' ),
-				'default' => 'yes',
-                'selectors' => [
-					'{{WRAPPER}} .subheading' => 'white-space: nowrap;',
-				],
-			]
-		);            
-        
-		$this->add_responsive_control(
-			'subheading_position',
-			[
-				'label' => __( 'Position', 'elementor' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'flex-start' => [
-						'title' => __( 'Left', 'elementor' ),
-						'icon' => 'eicon-h-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'elementor' ),
-						'icon' => 'eicon-h-align-center',
-					],
-					'flex-end' => [
-						'title' => __( 'Right', 'elementor' ),
-						'icon' => 'eicon-h-align-right',
-					],
-				],
-				'default' => '',
-				'selectors' => [
-					'{{WRAPPER}} .subheading-container' => 'justify-content: {{VALUE}};',
-				],
-                'condition' => [
-                    'subheading!' => '',
-                ],
-			]
-		);        
-
-        $this->end_controls_section();
-
-		$this->start_controls_section(
-			'section_style_topline',
-			[
-				'label' => __( 'Topline', 'elementor' ),
+				'label' => __( ucfirst($title_type), 'flextensions' ),
 				'tab' => Controls_Manager::TAB_STYLE,
+				'condition' => [
+					$title_type . '!' => '',
+				]
 			]
 		);
 
-        $this->start_controls_tabs( 'colors' );
+		$this->add_control(
+			$title_type . '_color',
+			[
+				'label' => __( 'Text Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .' . $title_type . '-content' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => $title_type . '_typography',
+				'selector' => '{{WRAPPER}} .' . $title_type . '-content',
+			]
+		);
+
+		$this->start_controls_tabs( $title_type . '_shadow' );
 
 		$this->start_controls_tab(
-			'colors_normal',
+			$title_type . '_shadow_normal',
 			[
-				'label' => __( 'Normal', 'elementor' ),
+				'label' => __( 'Shadow', 'elementor' ),
 			]
 		);
 	
-		$this->end_controls_tab();
+		$this->add_control(
+			$title_type . '_text_border',
+			[
+				'label' => __( 'Text Border (px)', 'elementor' ),
+				'type' => Controls_Manager::NUMBER,
+				'min' => '0',
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .' . $title_type . '-content' => 'text-shadow: -{{VALUE}}px -{{VALUE}}px {{' . $title_type . '_text_border_blur.VALUE}}px {{' . $title_type . '_text_border_color.VALUE}}, -{{VALUE}}px 0px {{' . $title_type . '_text_border_blur.VALUE}}px {{' . $title_type . '_text_border_color.VALUE}}, -{{VALUE}}px {{VALUE}}px {{' . $title_type . '_text_border_blur.VALUE}}px {{' . $title_type . '_text_border_color.VALUE}}, 0px -{{VALUE}}px {{' . $title_type . '_text_border_blur.VALUE}}px {{' . $title_type . '_text_border_color.VALUE}}, 0px {{VALUE}}px {{' . $title_type . '_text_border_blur.VALUE}}px {{' . $title_type . '_text_border_color.VALUE}}, {{VALUE}}px -{{VALUE}}px {{' . $title_type . '_text_border_blur.VALUE}}px {{' . $title_type . '_text_border_color.VALUE}}, {{VALUE}}px 0px {{' . $title_type . '_text_border_blur.VALUE}}px {{' . $title_type . '_text_border_color.VALUE}}, {{VALUE}}px {{VALUE}}px {{' . $title_type . '_text_border_blur.VALUE}}px {{' . $title_type . '_text_border_color.VALUE}};',
+				],
+			]
+		);
 
-		$this->start_controls_tab(
-			  'colors_hover',
-			  [
-				  'label' => __( 'Hover', 'elementor' ),
-			  ]
+		$this->add_control(
+			$title_type . '_text_border_color',
+			[
+				'label' => __( 'Text Border Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#0F0',
+				'condition' => [
+					$title_type . '_text_border!' => '',
+				],
+			]
+		);
+
+		$this->add_control(
+			$title_type . '_text_border_blur',
+			[
+				'label' => __( 'Text Border Blur (px)', 'elementor' ),
+				'type' => Controls_Manager::NUMBER,
+				'min' => '0',
+				'default' => 0,
+				'condition' => [
+					$title_type . '_text_border!' => '',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Text_Shadow::get_type(),
+			[
+				'name' => $title_type . '_text_shadow',
+				'selector' => '{{WRAPPER}} .' . $title_type . '-content',
+				'condition' => [
+					$title_type . '_text_border' => '',
+				],			
+			],
 		);
 
 		$this->end_controls_tab();
 
+		$this->start_controls_tab(
+			$title_type . '_shadow_stroke',
+			  [
+				  'label' => __( 'Stroke', 'elementor' ),
+			  ]
+		);		
+
+		$this->add_control(
+			$title_type . '_text_stroke',
+			[
+				'label' => __( 'Text Stroke (px)', 'elementor' ),
+				'type' => Controls_Manager::NUMBER,
+				'min' => '0',
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .' . $title_type . '-content' => '-webkit-text-stroke-width: {{VALUE}}px',
+				],
+			]
+		);			
+		
+		$this->add_control(
+			$title_type . '_text_stroke_color',
+			[
+				'label' => __( 'Text Stroke Color', 'elementor' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#0F0',
+				'selectors' => [
+					'{{WRAPPER}} .' . $title_type . '-content' => '-webkit-text-stroke-color: {{VALUE}};',
+				],				
+				'condition' => [
+					$title_type . '_text_stroke!' => '',
+				],
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+
+		$this->add_control(
+			$title_type . '_transform',
+			[
+				'label' => __( 'Transform', 'flextensions' ),
+				'type' => \Elementor\Controls_Manager::SWITCHER,
+				'label_on' => __( 'No', 'elementor' ),
+				'label_off' => __( 'Yes', 'elementor' ),
+				'default' => '',
+			],
+		);
+					
+
+		$this->add_responsive_control(
+			$title_type . '_rotate',
+			[
+				'label' => __( 'Rotate', 'flextensions' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'deg' ],
+				'range' => [
+					'deg' => [
+						'min' => -180,
+						'max' => 180,
+						'step' => 1,
+					],
+				],
+				'default' => [
+					'unit' => 'deg',
+					'size' => '0',
+				],
+				'condition' => [
+					$title_type . '_transform' => 'yes',
+                ],
+			]
+		);
+
+		$this->add_responsive_control(
+			$title_type . '_skew',
+			[
+				'label' => __( 'Skew', 'flextensions' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'deg' ],
+				'range' => [
+					'deg' => [
+						'min' => -180,
+						'max' => 180,
+						'step' => 1,
+					],
+				],
+				'default' => [
+					'unit' => 'deg',
+					'size' => '0',
+				],
+				'condition' => [
+					$title_type . '_transform' => 'yes',
+                ],
+			]
+		);
+
+    	$this->add_responsive_control(
+			$title_type . '_translateX',
+			[
+				'label' => __( 'Move', 'flextensions' ) . ' <i class="eicon-exchange" style="transform: rotate(90deg)"></i>',
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'vw' ],
+				'range' => [
+					'px' => [
+						'min' => -100,
+						'max' => 100,
+					],
+					'%' => [
+						'min' => -100,
+						'max' => 100,
+					],
+					'vw' => [
+						'min' => -100,
+						'max' => 100,
+					],					
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => '0',
+				],
+				'condition' => [
+					$title_type . '_transform' => 'yes',
+                ],
+			]
+		);
+
+		$this->add_responsive_control(
+			$title_type . '_translateY',
+			[
+				'label' => __( 'Move', 'flextensions' ) . ' <i class="eicon-exchange"></i>',
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'vh' ],
+				'range' => [
+					'px' => [
+						'min' => -100,
+						'max' => 100,
+					],
+					'%' => [
+						'min' => -100,
+						'max' => 100,
+					],
+					'vh' => [
+						'min' => -100,
+						'max' => 100,
+					],					
+				],
+				'default' => [
+					'unit' => 'px',
+					'size' => '0',
+				],
+                'condition' => [
+					$title_type . '_transform' => 'yes',
+                ],				
+			]
+		);		
+
+        $this->add_responsive_control(
+			$title_type . '_transform_origin',
+			[
+				'label' => __( 'Transform Anchor', 'flextensions' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'left' => [
+						'title' => __( 'Left', 'elementor' ),
+						'icon' => 'eicon-h-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'elementor' ),
+						'icon' => 'eicon-h-align-center',
+					],
+					'right' => [
+						'title' => __( 'Right', 'elementor' ),
+						'icon' => 'eicon-h-align-right',
+					],
+				],
+				'default' => 'center',
+				'selectors' => [
+					'{{WRAPPER}} .' . $title_type . '-content' => 'transform-origin: {{VALUE}}; transform: rotate({{' . $title_type . '_rotate.SIZE}}{{' . $title_type . '_rotate.UNIT}}) skewX({{' . $title_type . '_skew.SIZE}}{{' . $title_type . '_skew.UNIT}}) translateX({{' . $title_type . '_translateX.SIZE}}{{' . $title_type . '_translateX.UNIT}}) translateY({{' . $title_type . '_translateY.SIZE}}{{' . $title_type . '_translateY.UNIT}})',
+				],
+                'condition' => [
+					$title_type . '_transform' => 'yes',
+                ],
+			]
+		);				
+
 		$this->end_controls_section();
+
+		}
 	}
 
 	/**
@@ -676,9 +838,12 @@ class Flextensions_MultilineHeading extends Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings_for_display();
         
-        $title_types = ['topline', 'heading', 'subheading'];
+		$title_types = $this->title_types;
+
         foreach( $title_types as $type ) {
             $title = $settings[$type];
+			$this->add_render_attribute( $type, 'class', $type . '-content' );
+
             if( ! empty( $title ) ) {
                 $title_html = sprintf( '<%1$s %2$s>%3$s</%1$s>', Utils::validate_html_tag( $settings[$type . '_tag'] ), $this->get_render_attribute_string( $type ), $title );
                 echo '<div class="' . $type . '-container">';
@@ -708,13 +873,16 @@ class Flextensions_MultilineHeading extends Widget_Base {
 
         _.each( title_types, function( type, index ) {
             var title = settings[ type ];
-            
-            var title_tag = type + '_tag';
-            var headerSizeTag = elementor.helpers.validateHTMLTag( settings[ title_tag ] ); #>
+			view.addRenderAttribute( type, 'class', type + '-content' );
+			view.addInlineEditingAttributes( type );
+        
+			var title_tag = type + '_tag';
+            var headerSizeTag = elementor.helpers.validateHTMLTag( settings[ title_tag ] );
+			title_html = '<' + headerSizeTag  + ' ' + view.getRenderAttributeString( type ) + '>' + title + '</' + headerSizeTag + '>'; #>
             <div class="{{ type }}-container">
             <div class="{{ type }}_before"></div>
             <div class="{{ type }}">
-			<{{ headerSizeTag }}>{{{ title }}}<{{ headerSizeTag }}>
+			<# print( title_html ); #>
             </div>
             <div class="{{ type }}_after"></div>
             </div>
