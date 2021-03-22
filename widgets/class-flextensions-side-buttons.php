@@ -11,7 +11,7 @@
  * @link       link(https://github.com/fleks/flextensions-for-elementor,
  *             Flextensions for Elementor on GitHub)
  * @since      1.0.1
- * php version 7.1
+ * php version 7.2
  */
 
 namespace Flextensions\Widgets;
