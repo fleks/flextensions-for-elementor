@@ -45,8 +45,7 @@ class Flextensions_SideButtons extends Widget_Base {
 	 public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
 
-		wp_register_style( 'flextensions-side-buttons', plugins_url( '/assets/css/flextensions-side-buttons.css', FLEXTENSIONS ), array(), '1.0.0' );
-		wp_register_script( 'flextensions-side-buttons', plugins_url( '/assets/js/flextensions-side-buttons.js', FLEXTENSIONS ), array(), '1.0.0' );
+		wp_register_script( 'flextensions-side-buttons', plugins_url( '/assets/js/flextensions-side-buttons.js', FLEXTENSIONS ), array(), '1.0.4' );
 	}
 
 	/**
@@ -105,13 +104,6 @@ class Flextensions_SideButtons extends Widget_Base {
 	public function get_categories() {
 		return array( 'flextensions-category' );
 	}
-	
-	/**
-	 * Enqueue styles.
-	 */
-	public function get_style_depends() {
-		return array( 'flextensions-side-buttons' );
-	}
 
     /**
 	 * Enqueue scripts.
@@ -131,7 +123,7 @@ class Flextensions_SideButtons extends Widget_Base {
 	 * @return array Widget keywords.
 	 */
 	public function get_keywords() {
-		return [ 'icon list', 'icon', 'list' ];
+		return [ 'icon list', 'icon', 'list', 'button', 'side', 'buttons' ];
 	}    
 
 	/**
@@ -475,7 +467,7 @@ class Flextensions_SideButtons extends Widget_Base {
 					'size' => 0,
 				],
 				'selectors' => [
-					'{{WRAPPER}}' => '{{side.value}}: calc( {{SIZE}}{{UNIT}} - {{width.size}}{{width.unit}} )',
+					'{{WRAPPER}}' => '{{side.value}}: calc( {{SIZE}}{{UNIT}} - {{width.size}}{{width.unit}} );',
 				],
 			]
 		);
@@ -521,7 +513,7 @@ class Flextensions_SideButtons extends Widget_Base {
 					'size' => '',
 				],
 				'selectors' => [
-					'{{WRAPPER}}' => 'top: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}' => 'top: {{SIZE}}{{UNIT}}; transform: translate(0, 0);',
 				],
                 'condition' => [
                     'bottom[size]' => '',
@@ -556,7 +548,7 @@ class Flextensions_SideButtons extends Widget_Base {
 					'size' => '',
 				],
 				'selectors' => [
-					'{{WRAPPER}}' => 'bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}' => 'bottom: {{SIZE}}{{UNIT}}; transform: translate(0, 0);',
 				],
                 'condition' => [
                     'top[size]' => '',
@@ -564,7 +556,7 @@ class Flextensions_SideButtons extends Widget_Base {
 			]
 		);
         
-		$this->add_control(
+		$this->add_responsive_control(
 			'position_anchor_top',
 			[
 				'label' => __( 'Position Anchor', 'flextensions' ),
@@ -573,15 +565,15 @@ class Flextensions_SideButtons extends Widget_Base {
 				'label_off' => __( 'Top', 'flextensions' ),
     			'default' => 'yes',
 				'selectors' => [
-					'{{WRAPPER}}' => 'transform: translate(0, -50%)',
+					'{{WRAPPER}}' => 'transform: translate(0, -50%);',
 				],
                 'condition' => [
                     'top[size]!' => '',
-                ],                
+				],
 			]
 		); 
         
-		$this->add_control(
+		$this->add_responsive_control(
 			'position_anchor_bottom',
 			[
 				'label' => __( 'Position Anchor', 'flextensions' ),
@@ -590,13 +582,13 @@ class Flextensions_SideButtons extends Widget_Base {
 				'label_off' => __( 'Bottom', 'flextensions' ),
     			'default' => 'yes',
 				'selectors' => [
-					'{{WRAPPER}}' => 'transform: translate(0, 50%)',
+					'{{WRAPPER}}' => 'transform: translate(0, 50%);',
 				],
                 'condition' => [
                     'bottom[size]!' => '',
-                ],                
+                ],
 			]
-		);           
+		);
 
 		$this->add_control(
 			'z_index',
@@ -658,7 +650,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				],
 			]
 		);
-
+/*
     	$this->add_responsive_control(
 			'icon_padding',
 			[
@@ -689,7 +681,7 @@ class Flextensions_SideButtons extends Widget_Base {
 					'{{WRAPPER}} dt i' => 'padding: {{SIZE}}{{UNIT}}',
 				],
 			]
-		);
+		); */
         
     	$this->add_responsive_control(
 			'icon_container_width',
@@ -792,7 +784,7 @@ class Flextensions_SideButtons extends Widget_Base {
 					'size' => 150,
 				],                
 				'selectors' => [
-					'{{WRAPPER}} dd' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} dd' => 'width: {{SIZE}}{{UNIT}}; margin-inline-start: 0;',
 				],
 			]
 		);
