@@ -369,7 +369,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				'selector' => '{{WRAPPER}} a, {{WRAPPER}} a',
 			]
 		);
-        
+
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
