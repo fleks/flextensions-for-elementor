@@ -228,8 +228,9 @@ class Flextensions_SideButtons extends Widget_Base {
 				'default' => 'right',
 				'toggle' => false,
                 'selectors' => [
+					'.elementor-widget-flextensions-side-buttons .elementor-widget-container' =>  'min-height: 1px;',
                     '{{WRAPPER}}' => 'position: fixed; width: auto;',
-                    '{{WRAPPER}} dt' => 'clear: both;',
+					'{{WRAPPER}} dt' => 'clear: both;',
                     '{{WRAPPER}} dt, {{WRAPPER}} dd' => 'display: flex; position: relative; {{VALUE}}: 0px',
                 ],
 			]
