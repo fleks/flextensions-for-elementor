@@ -150,8 +150,6 @@ class Flextensions_MultilineHeading extends Widget_Base {
 	 */
 	protected function _register_controls() {
 
-		$this->end_controls_section();
-
 		$title_types = $this->title_types;
 
 		foreach( $this->title_types as $title_type ) {
