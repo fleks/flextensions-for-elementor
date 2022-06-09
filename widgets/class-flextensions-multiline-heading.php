@@ -148,7 +148,7 @@ class Flextensions_MultilineHeading extends Widget_Base {
 	 *
 	 * @access protected
 	 */
-	protected function _register_controls() {
+	protected function register_controls() {
 
 		$title_types = $this->title_types;
 
