@@ -862,7 +862,7 @@ class Flextensions_MultilineHeading extends Widget_Base {
 	 *
 	 * @access protected
 	 */
-	protected function _content_template() {
+	protected function content_template() {
 		?>
         <#
         var title_types = ['topline', 'heading', 'subheading'];
