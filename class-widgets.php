@@ -87,12 +87,12 @@ class Widgets {
 		$this->include_widgets_files();
 
 		// Register the plugin widget classes.
-		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_TopArrow() );
-		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_AllControls() );
-		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_AllAnimations() );
-		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_MultilineHeading() );
-		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_SideButtons() );
-		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Widgets\Flextensions_FlexGallery() );
+		\Elementor\Plugin::instance()->widgets_manager->register( new Widgets\Flextensions_TopArrow() );
+		\Elementor\Plugin::instance()->widgets_manager->register( new Widgets\Flextensions_AllControls() );
+		\Elementor\Plugin::instance()->widgets_manager->register( new Widgets\Flextensions_AllAnimations() );
+		\Elementor\Plugin::instance()->widgets_manager->register( new Widgets\Flextensions_MultilineHeading() );
+		\Elementor\Plugin::instance()->widgets_manager->register( new Widgets\Flextensions_SideButtons() );
+		\Elementor\Plugin::instance()->widgets_manager->register( new Widgets\Flextensions_FlexGallery() );
 	}
 
 	/**
