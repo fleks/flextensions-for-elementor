@@ -105,7 +105,7 @@ class Widgets {
 	 */
 	public function __construct() {
 		// Register the widgets.
-		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_widgets' ) );
+		add_action( 'elementor/widgets/register', array( $this, 'register_widgets' ) );
 	}
 }
 
