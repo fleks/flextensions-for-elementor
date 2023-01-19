@@ -345,6 +345,7 @@ class Flextensions_SideButtons extends Widget_Base {
 				'default' => '#FFFFFF',
 				'selectors' => [
 					'{{WRAPPER}} dl a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} dl a' => 'fill: {{VALUE}};',
 				],                
 			]
 		);
@@ -647,7 +648,8 @@ class Flextensions_SideButtons extends Widget_Base {
 					'size' => 32,
 				],
 				'selectors' => [
-					'{{WRAPPER}} dt' => 'font-size: {{SIZE}}{{UNIT}}; text-align: center;',
+					'{{WRAPPER}} dt i' => 'font-size: {{SIZE}}{{UNIT}}; text-align: center;',
+					'{{WRAPPER}} dt svg' => 'width: {{SIZE}}{{UNIT}}; text-align: center;',
 				],
 			]
 		);
